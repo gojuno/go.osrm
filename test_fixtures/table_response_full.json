@@ -1,0 +1,34 @@
+{
+    "code": "Ok",
+    "durations": [
+        [0, 39, 46.8],
+        [39.5, 0, 34.2],
+        [47.2, 34.2, 0]
+    ],
+    "destinations": [{
+        "hint": "ZUQGgDVLBoAAAAAADgAAAAkAAAAYAAAAbAAAACqYdgApmHYAAgAAAM3_lvvPQW0C3P-W-8xBbQIBAAEBt2xXEQ==",
+        "name": "",
+        "location": [-73.990195, 40.714703]
+    }, {
+        "hint": "vSwGgJc_BoAAAAAAFwAAABcAAAAAAAAAAAAAAHzinABa75wAAgAAAHf5lvvgTG0CiPmW-wJNbQIAAAEBt2xXEQ==",
+        "name": "",
+        "location": [-73.991817, 40.717536]
+    }, {
+        "hint": "JT8GgOJDBoAAAAAABAAAAAgAAAAhAAAAKgAAAAvdlQBOygQAAgAAAC4Rl_uHRW0CKhGX-4JFbQIEAAEBt2xXEQ==",
+        "name": "",
+        "location": [-73.985746, 40.715655]
+    }],
+    "sources": [{
+        "hint": "ZUQGgDVLBoAAAAAADgAAAAkAAAAYAAAAbAAAACqYdgApmHYAAgAAAM3_lvvPQW0C3P-W-8xBbQIBAAEBt2xXEQ==",
+        "name": "",
+        "location": [-73.990195, 40.714703]
+    }, {
+        "hint": "vSwGgJc_BoAAAAAAFwAAABcAAAAAAAAAAAAAAHzinABa75wAAgAAAHf5lvvgTG0CiPmW-wJNbQIAAAEBt2xXEQ==",
+        "name": "",
+        "location": [-73.991817, 40.717536]
+    }, {
+        "hint": "JT8GgOJDBoAAAAAABAAAAAgAAAAhAAAAKgAAAAvdlQBOygQAAgAAAC4Rl_uHRW0CKhGX-4JFbQIEAAEBt2xXEQ==",
+        "name": "",
+        "location": [-73.985746, 40.715655]
+    }]
+}
