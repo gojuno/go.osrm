@@ -2,24 +2,34 @@ package osrm
 
 // TableRequest represents a request to the table method
 type TableRequest struct {
-	Request
+	Profile               string
+	GeoPath               GeoPath
 	Sources, Destinations []int
 }
 
 // TableResponse resresents a response from the table method
 type TableResponse struct {
-	ResponseError
 	Durations [][]float32 `json:"durations"`
 }
 
-func (r TableRequest) request() *Request {
-	r.service = "table"
-	r.options = Options{}
+type tableResponseOrError struct {
+	responseStatus
+	TableResponse
+}
+
+func (r TableRequest) request() *request {
+	opts := options{}
 	if len(r.Sources) > 0 {
-		r.options.AddInt("sources", r.Sources...)
+		opts.AddInt("sources", r.Sources...)
 	}
 	if len(r.Destinations) > 0 {
-		r.options.AddInt("destinations", r.Destinations...)
+		opts.AddInt("destinations", r.Destinations...)
 	}
-	return &r.Request
+
+	return &request{
+		profile: r.Profile,
+		geoPath: r.GeoPath,
+		service: "table",
+		options: opts,
+	}
 }

@@ -2,51 +2,51 @@ package osrm
 
 import "errors"
 
-type ErrCode string
-
+// Error codes that could be returned from OSRM
 const (
-	OK                ErrCode = "Ok"
-	ErrInvalidURL     ErrCode = "InvalidUrl"
-	ErrInvalidService ErrCode = "InvalidService"
-	ErrInvalidVersion ErrCode = "InvalidVersion"
-	ErrInvalidOptions ErrCode = "InvalidOptions"
-	ErrInvalidQuery   ErrCode = "InvalidQuery"
-	ErrInvalidValue   ErrCode = "InvalidValue"
-	ErrNoSegment      ErrCode = "NoSegment"
-	ErrTooBig         ErrCode = "TooBig"
-	ErrNoRoute        ErrCode = "NoRoute"
-	ErrNoTable        ErrCode = "NoTable"
-	ErrNoMatch        ErrCode = "NoMatch"
-
-	// ErrInternal for errors which don't related to OSRM
-	ErrInternal ErrCode = "Internal"
+	ErrorCodeInvalidURL     = "InvalidUrl"
+	ErrorCodeInvalidService = "InvalidService"
+	ErrorCodeInvalidVersion = "InvalidVersion"
+	ErrorCodeInvalidOptions = "InvalidOptions"
+	ErrorCodeInvalidQuery   = "InvalidQuery"
+	ErrorCodeInvalidValue   = "InvalidValue"
+	ErrorCodeNoSegment      = "NoSegment"
+	ErrorCodeTooBig         = "TooBig"
+	ErrorCodeNoRoute        = "NoRoute"
+	ErrorCodeNoTable        = "NoTable"
+	ErrorCodeNoMatch        = "NoMatch"
+	errorCodeOK             = "Ok" // "Ok" error code never returned to library client, thus not exported
 )
 
+// Invalid request errors
 var (
-	ErrEmptyServiceName = errors.New("osrm5: the request should contain a service name")
 	ErrEmptyProfileName = errors.New("osrm5: the request should contain a profile name")
 	ErrNoCoordinates    = errors.New("osrm5: the request should contain coordinates")
+	ErrEmptyServiceName = errors.New("osrm5: the request should contain a service name")
 )
 
-type Error interface {
-	ErrCode() ErrCode
-	Error() string
-}
-
+// ResponseError represent OSRM API error
 type ResponseError struct {
-	Code ErrCode `json:"code"`
-	Msg  string  `json:"message"`
+	Code    string `json:"code"`
+	Message string `json:"message"`
 }
 
-// WrapError creates an error with internal code
-func WrapError(err error) Error {
-	return ResponseError{ErrInternal, err.Error()}
-}
-
-func (err ResponseError) ErrCode() ErrCode {
+// ErrCode returns error code from OSRM response
+func (err ResponseError) ErrCode() string {
 	return err.Code
 }
 
 func (err ResponseError) Error() string {
-	return err.Msg
+	return err.Message
+}
+
+type responseStatus struct {
+	ResponseError
+}
+
+func (r responseStatus) apiError() error {
+	if r.Code != errorCodeOK {
+		return r.ResponseError
+	}
+	return nil
 }

@@ -4,7 +4,8 @@ import geo "github.com/paulmach/go.geo"
 
 // RouteRequest represents a request to the route method
 type RouteRequest struct {
-	Request
+	Profile     string
+	GeoPath     GeoPath
 	Bearings    []Bearing
 	Steps       Steps
 	Annotations Annotations
@@ -14,8 +15,12 @@ type RouteRequest struct {
 
 // RouteResponse represents a response from the route method
 type RouteResponse struct {
-	ResponseError
 	Routes []Route `json:"routes"`
+}
+
+type routeResponseOrError struct {
+	responseStatus
+	RouteResponse
 }
 
 // Route represents a route through (potentially multiple) points.
@@ -58,35 +63,41 @@ type StepManeuver struct {
 	Modifier      string    `json:"modifier"`
 }
 
-func (r RouteRequest) request() *Request {
-	r.service = "route"
-	r.options = stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries)
-	r.options.Set("continue_straight", "true")
+func (r RouteRequest) request() *request {
+	opts := stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries)
+	opts.Set("continue_straight", "true")
+
 	if len(r.Bearings) > 0 {
-		r.options.Set("bearings", bearings(r.Bearings))
+		opts.Set("bearings", bearings(r.Bearings))
 	}
-	return &r.Request
+
+	return &request{
+		profile: r.Profile,
+		geoPath: r.GeoPath,
+		service: "route",
+		options: opts,
+	}
 }
 
-func stepsOptions(s Steps, a Annotations, o Overview, g Geometries) Options {
-	options := Options{}
+func stepsOptions(s Steps, a Annotations, o Overview, g Geometries) options {
+	opts := options{}
 
 	if steps := s.String(); steps != "" {
-		options.Set("steps", steps)
+		opts.Set("steps", steps)
 	}
 
 	if annotations := a.String(); annotations != "" {
-		options.Set("annotations", annotations)
+		opts.Set("annotations", annotations)
 	}
 
-	options.Set("geometries", GeometriesPolyline6.String())
+	opts.Set("geometries", GeometriesPolyline6.String())
 	if geometries := g.String(); geometries != "" {
-		options.Set("geometries", geometries)
+		opts.Set("geometries", geometries)
 	}
 
 	if overview := o.String(); overview != "" {
-		options.Set("overview", overview)
+		opts.Set("overview", overview)
 	}
 
-	return options
+	return opts
 }

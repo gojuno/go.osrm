@@ -7,47 +7,48 @@ import (
 	"strconv"
 )
 
-type Options map[string][]string
+// options represents OSRM query params to be encoded in URL
+type options map[string][]string
 
 // Set saves a string value by the key
-func (opts Options) Set(k, v string) {
+func (opts options) Set(k, v string) {
 	opts[k] = []string{v}
 }
 
 // SetBool converts bool to string and set a key
-func (opts Options) SetBool(k string, v bool) {
+func (opts options) SetBool(k string, v bool) {
 	opts.Set(k, fmt.Sprintf("%t", v))
 }
 
 // AddInt converts int to string and appends it to the key
-func (opts Options) AddInt(k string, v ...int) {
+func (opts options) AddInt(k string, v ...int) {
 	for _, n := range v {
 		opts[k] = append(opts[k], strconv.Itoa(n))
 	}
 }
 
 // AddInt64 converts int64 to string and appends it to the key
-func (opts Options) AddInt64(k string, v ...int64) {
+func (opts options) AddInt64(k string, v ...int64) {
 	for _, n := range v {
 		opts[k] = append(opts[k], strconv.FormatInt(n, 10))
 	}
 }
 
 // AddFloat converts float to string and appends it to the key
-func (opts Options) AddFloat(k string, v ...float64) {
+func (opts options) AddFloat(k string, v ...float64) {
 	for _, f := range v {
 		opts[k] = append(opts[k], strconv.FormatFloat(f, 'f', -1, 64))
 	}
 }
 
 // Add appends values to the key
-func (opts Options) Add(k string, v ...string) {
+func (opts options) Add(k string, v ...string) {
 	opts[k] = append(opts[k], v...)
 }
 
-// Encode encodes the options into ``OSRM query`` form
+// Encode encodes the options into OSRM query form
 // ({option}={element};{element}[;{element} ... ]) sorted by key
-func (opts Options) Encode() string {
+func (opts options) Encode() string {
 	if opts == nil {
 		return ""
 	}

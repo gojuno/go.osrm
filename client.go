@@ -23,8 +23,8 @@ func NewClientWithTimeout(serverURL string, timeout time.Duration) Client {
 	return NewClient(serverURL, NewDefaultTransport(timeout))
 }
 
-// Serve makes GET request to OSRM server and decodes the given JSON
-func (c Client) Serve(ctx context.Context, in *Request, out Response) error {
+// doRequest makes GET request to OSRM server and decodes the given JSON
+func (c Client) doRequest(ctx context.Context, in *request, out interface{}) error {
 	url, err := in.URL(c.serverURL)
 	if err != nil {
 		return err

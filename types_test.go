@@ -44,9 +44,9 @@ func TestPolylineGeoPath(t *testing.T) {
 }
 
 func TestRequestURLWithEmptyOptions(t *testing.T) {
-	req := Request{
-		Profile: "something",
-		GeoPath: geoPath,
+	req := request{
+		profile: "something",
+		geoPath: geoPath,
 		service: "foobar",
 	}
 	url, err := req.URL("localhost")
@@ -55,11 +55,11 @@ func TestRequestURLWithEmptyOptions(t *testing.T) {
 }
 
 func TestRequestURLWithOptions(t *testing.T) {
-	opts := Options{}
+	opts := options{}
 	opts.Set("baz", "quux")
-	req := Request{
-		Profile: "something",
-		GeoPath: geoPath,
+	req := request{
+		profile: "something",
+		geoPath: geoPath,
 		service: "foobar",
 		options: opts,
 	}
@@ -69,7 +69,7 @@ func TestRequestURLWithOptions(t *testing.T) {
 }
 
 func TestRequestURLWithEmptyService(t *testing.T) {
-	req := Request{}
+	req := request{}
 	url, err := req.URL("localhost")
 	require.NotNil(t, err)
 	assert.Equal(t, ErrEmptyServiceName, err)
@@ -77,7 +77,7 @@ func TestRequestURLWithEmptyService(t *testing.T) {
 }
 
 func TestRequestURLWithEmptyProfile(t *testing.T) {
-	req := Request{
+	req := request{
 		service: "foobar",
 	}
 	url, err := req.URL("localhost")
@@ -87,8 +87,8 @@ func TestRequestURLWithEmptyProfile(t *testing.T) {
 }
 
 func TestRequestURLWithoutCoords(t *testing.T) {
-	req := Request{
-		Profile: "something",
+	req := request{
+		profile: "something",
 		service: "foobar",
 	}
 	url, err := req.URL("localhost")

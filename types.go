@@ -27,6 +27,7 @@ func NewGeoPathFromPointSet(s geo.PointSet) *GeoPath {
 // Tidy represents a tidy param for osrm5 match request
 type Tidy string
 
+// Supported tidy param values
 const (
 	TidyTrue  Tidy = "true"
 	TidyFalse Tidy = "false"
@@ -40,6 +41,7 @@ func (t Tidy) String() string {
 // Annotations represents a annotations param for osrm5 request
 type Annotations string
 
+// Supported annotations param values
 const (
 	AnnotationsTrue  Annotations = "true"
 	AnnotationsFalse Annotations = "false"
@@ -53,6 +55,7 @@ func (a Annotations) String() string {
 // Steps represents a steps param for osrm5 request
 type Steps string
 
+// Supported steps param values
 const (
 	StepsTrue  Steps = "true"
 	StepsFalse Steps = "false"
@@ -66,6 +69,7 @@ func (s Steps) String() string {
 // Gaps represents a gaps param for osrm5 match request
 type Gaps string
 
+// Supported gaps param values
 const (
 	GapsSplit  Gaps = "split"
 	GapsIgnore Gaps = "ignore"
@@ -79,6 +83,7 @@ func (g Gaps) String() string {
 // Geometries represents a geometries param for osrm5
 type Geometries string
 
+// Supported geometries param values
 const (
 	GeometriesPolyline6 Geometries = "polyline6"
 	GeometriesGeojson   Geometries = "geojson"
@@ -104,29 +109,23 @@ func (o Overview) String() string {
 	return string(o)
 }
 
-// Request contains parameters for OSRM query
-type Request struct {
-	Profile string
-	GeoPath GeoPath
-
+// request contains parameters for OSRM query
+type request struct {
+	profile string
+	geoPath GeoPath
 	service string
-	options Options
-}
-
-// Response contains properties from OSRM query
-type Response interface {
-	Error
+	options options
 }
 
 // URL generates a url for OSRM request
-func (r *Request) URL(serverURL string) (string, error) {
+func (r *request) URL(serverURL string) (string, error) {
 	if r.service == "" {
 		return "", ErrEmptyServiceName
 	}
-	if r.Profile == "" {
+	if r.profile == "" {
 		return "", ErrEmptyProfileName
 	}
-	if r.GeoPath.Length() == 0 {
+	if r.geoPath.Length() == 0 {
 		return "", ErrNoCoordinates
 	}
 	// http://{server}/{service}/{version}/{profile}/{coordinates}[.{format}]?option=value&option=value
@@ -134,8 +133,8 @@ func (r *Request) URL(serverURL string) (string, error) {
 		serverURL, // server
 		r.service, // service
 		version,   // version
-		r.Profile, // profile
-		"polyline(" + r.GeoPath.Polyline() + ")", // coordinates
+		r.profile, // profile
+		"polyline(" + r.geoPath.Polyline() + ")", // coordinates
 	}, "/")
 	if len(r.options) > 0 {
 		url += "?" + r.options.Encode() // options

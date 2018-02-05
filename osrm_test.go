@@ -15,19 +15,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var (
-	geoPath = *NewGeoPathFromPointSet(
-		geo.PointSet([]geo.Point{
-			{-73.990185, 40.714701},
-			{-73.991801, 40.717571},
-			{-73.985751, 40.715651},
-		}))
-
-	pathRequest = Request{
-		Profile: "car",
-		GeoPath: geoPath,
-	}
-)
+var geoPath = *NewGeoPathFromPointSet(
+	geo.PointSet([]geo.Point{
+		{-73.990185, 40.714701},
+		{-73.991801, 40.717571},
+		{-73.985751, 40.715651},
+	}))
 
 func fixturedJSON(name string) []byte {
 	data, err := ioutil.ReadFile("test_fixtures/" + name + ".json")
@@ -47,18 +40,16 @@ func fixturedHTTPHandler(name string, assertURL func(path, query string)) http.H
 func TestErrorWithTimeout(t *testing.T) {
 	osrm := NewFromURLWithTimeout("http://25.0.0.1", 500*time.Microsecond)
 
-	var nothing Response
+	var nothing response
 
-	request := Request{
+	req := request{
 		service: "nothing",
-		Profile: "nothing",
-		GeoPath: geoPath,
+		profile: "nothing",
+		geoPath: geoPath,
 	}
 
-	err := osrm.query(context.Background(), &request, nothing)
-
+	err := osrm.query(context.Background(), &req, nothing)
 	require.NotNil(t, err)
-	assert.Equal(t, ErrInternal, err.ErrCode())
 }
 
 func TestErrorOnRouteRequest(t *testing.T) {
@@ -71,14 +62,15 @@ func TestErrorOnRouteRequest(t *testing.T) {
 	osrm := NewFromURL(ts.URL)
 
 	r, err := osrm.Route(context.Background(), RouteRequest{
-		Request:     pathRequest,
+		Profile:     "car",
+		GeoPath:     geoPath,
 		Annotations: AnnotationsFalse,
 		Steps:       StepsFalse,
 		Geometries:  GeometriesPolyline6,
 		Overview:    OverviewFalse})
 
 	require.NotNil(t, err)
-	assert.Equal(t, ErrNoRoute, err.ErrCode())
+	assert.Equal(t, ErrorCodeNoRoute, err.(ResponseError).ErrCode())
 	assert.Equal(t, "no route to coordinates", err.Error())
 	assert.Nil(t, r)
 }
@@ -93,7 +85,8 @@ func TestRouteRequest(t *testing.T) {
 	osrm := NewFromURL(ts.URL)
 
 	r, err := osrm.Route(context.Background(), RouteRequest{
-		Request:     pathRequest,
+		Profile:     "car",
+		GeoPath:     geoPath,
 		Annotations: AnnotationsTrue,
 		Geometries:  GeometriesPolyline6,
 		Overview:    OverviewFull,
@@ -144,7 +137,7 @@ func TestTableRequest(t *testing.T) {
 
 	osrm := NewFromURL(ts.URL)
 
-	r, err := osrm.Table(context.Background(), TableRequest{Request: pathRequest})
+	r, err := osrm.Table(context.Background(), TableRequest{Profile: "car", GeoPath: geoPath})
 
 	require := require.New(t)
 
@@ -167,7 +160,8 @@ func TestMatchRequest(t *testing.T) {
 	osrm := NewFromURL(ts.URL)
 
 	r, err := osrm.Match(context.Background(), MatchRequest{
-		Request: pathRequest,
+		Profile: "car",
+		GeoPath: geoPath,
 	})
 
 	require := require.New(t)

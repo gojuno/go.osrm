@@ -4,7 +4,8 @@ import geo "github.com/paulmach/go.geo"
 
 // MatchRequest represents a request to the match method
 type MatchRequest struct {
-	Request
+	Profile     string
+	GeoPath     GeoPath
 	Steps       Steps
 	Annotations Annotations
 	Tidy        Tidy
@@ -18,9 +19,13 @@ type MatchRequest struct {
 
 // MatchResponse represents a response from the match method
 type MatchResponse struct {
-	ResponseError
 	Matchings   []Matching  `json:"matchings"`
 	Tracepoints []*Waypoint `json:"tracepoints"`
+}
+
+type matchResponseOrError struct {
+	responseStatus
+	MatchResponse
 }
 
 // Matching represents an array of Route objects that assemble the trace
@@ -30,25 +35,28 @@ type Matching struct {
 	Geometry   GeoPath `json:"geometry"`
 }
 
-func (r MatchRequest) request() *Request {
-	r.service = "match"
-	r.options = matcherOptions(
+func (r MatchRequest) request() *request {
+	options := matcherOptions(
 		stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries),
 		r.Tidy,
 		r.Gaps,
 	)
-
 	if len(r.Timestamps) > 0 {
-		r.options.AddInt64("timestamps", r.Timestamps...)
+		options.AddInt64("timestamps", r.Timestamps...)
 	}
 	if len(r.Radiuses) > 0 {
-		r.options.AddFloat("radiuses", r.Radiuses...)
+		options.AddFloat("radiuses", r.Radiuses...)
 	}
 	if len(r.Hints) > 0 {
-		r.options.Add("hints", r.Hints...)
+		options.Add("hints", r.Hints...)
 	}
 
-	return &r.Request
+	return &request{
+		profile: r.Profile,
+		geoPath: r.GeoPath,
+		service: "match",
+		options: options,
+	}
 }
 
 // Waypoint represents a matched point on a route
@@ -60,7 +68,7 @@ type Waypoint struct {
 	Hint              string    `json:"hint"`
 }
 
-func matcherOptions(options Options, t Tidy, g Gaps) Options {
+func matcherOptions(options options, t Tidy, g Gaps) options {
 	if tidy := t.String(); tidy != "" {
 		options.Set("tidy", tidy)
 	}

@@ -19,6 +19,10 @@ type OSRM struct {
 	client Client
 }
 
+type response interface {
+	apiError() error
+}
+
 // New creates a client with default server url
 func New() *OSRM {
 	return NewFromURL(defaultServerURL)
@@ -39,42 +43,42 @@ func NewWithClient(client Client) *OSRM {
 	return &OSRM{client}
 }
 
-func (o OSRM) query(ctx context.Context, in *Request, out Response) Error {
-	if err := o.client.Serve(ctx, in, out); err != nil {
-		return WrapError(err)
+func (o OSRM) query(ctx context.Context, in *request, out response) error {
+	if err := o.client.doRequest(ctx, in, out); err != nil {
+		return err
 	}
-	if out.ErrCode() != OK {
-		return ResponseError{out.ErrCode(), out.Error()}
+	if err := out.apiError(); err != nil {
+		return err
 	}
 	return nil
 }
 
 // Route searches the shortest path between given coordinates.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#service-route for details.
-func (o OSRM) Route(ctx context.Context, r RouteRequest) (*RouteResponse, Error) {
-	resp := RouteResponse{}
+func (o OSRM) Route(ctx context.Context, r RouteRequest) (*RouteResponse, error) {
+	var resp routeResponseOrError
 	if err := o.query(ctx, r.request(), &resp); err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return &resp.RouteResponse, nil
 }
 
 // Table computes duration tables for the given locations.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#service-table for details.
-func (o OSRM) Table(ctx context.Context, r TableRequest) (*TableResponse, Error) {
-	resp := TableResponse{}
+func (o OSRM) Table(ctx context.Context, r TableRequest) (*TableResponse, error) {
+	var resp tableResponseOrError
 	if err := o.query(ctx, r.request(), &resp); err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return &resp.TableResponse, nil
 }
 
 // Match matches given GPS points to the road network in the most plausible way.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#service-match for details.
-func (o OSRM) Match(ctx context.Context, r MatchRequest) (*MatchResponse, Error) {
-	resp := MatchResponse{}
+func (o OSRM) Match(ctx context.Context, r MatchRequest) (*MatchResponse, error) {
+	var resp matchResponseOrError
 	if err := o.query(ctx, r.request(), &resp); err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return &resp.MatchResponse, nil
 }
