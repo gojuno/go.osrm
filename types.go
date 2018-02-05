@@ -24,6 +24,22 @@ func NewGeoPathFromPointSet(s geo.PointSet) *GeoPath {
 	}
 }
 
+// Polyline generates a polyline in Google format
+// It uses default factor because of OSRM5 doesn't support polyline6 as coordinates
+func (g *GeoPath) Polyline() string {
+	return g.Encode()
+}
+
+// UnmarshalJSON parses a geo path from points set or a polyline
+func (g *GeoPath) UnmarshalJSON(b []byte) (err error) {
+	var encoded string
+	if err = json.Unmarshal(b, &encoded); err == nil {
+		g.Path = *geo.NewPathFromEncoding(encoded, polyline6Factor)
+		return
+	}
+	return json.Unmarshal(b, &g.PointSet)
+}
+
 // Tidy represents a tidy param for osrm5 match request
 type Tidy string
 
@@ -155,22 +171,6 @@ func (r *request) URL(serverURL string) (string, error) {
 		url += "?" + r.options.Encode() // options
 	}
 	return url, nil
-}
-
-// Polyline generates a polyline in Google format
-// It uses default factor because of OSRM5 doesn't support polyline6 as coordinates
-func (g *GeoPath) Polyline() string {
-	return g.Encode()
-}
-
-// UnmarshalJSON parses a geo path from points set or a polyline
-func (g *GeoPath) UnmarshalJSON(b []byte) (err error) {
-	var encoded string
-	if err = json.Unmarshal(b, &encoded); err == nil {
-		g.Path = *geo.NewPathFromEncoding(encoded, polyline6Factor)
-		return
-	}
-	return json.Unmarshal(b, &g.PointSet)
 }
 
 // Bearing limits the search to segments with given bearing in degrees towards true north in clockwise direction.
