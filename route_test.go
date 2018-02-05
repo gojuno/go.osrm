@@ -10,7 +10,7 @@ func TestEmptyRouteRequestOptions(t *testing.T) {
 	req := RouteRequest{}
 	assert.Equal(
 		t,
-		"continue_straight=true&geometries=polyline6",
+		"geometries=polyline6",
 		req.request().options.Encode())
 }
 
@@ -20,6 +20,7 @@ func TestRouteRequestOptionsWithBearings(t *testing.T) {
 			{60, 380},
 			{45, 180},
 		},
+		ContinueStraight: ContinueStraightTrue,
 	}
 	assert.Equal(
 		t,
@@ -29,7 +30,8 @@ func TestRouteRequestOptionsWithBearings(t *testing.T) {
 
 func TestRouteRequestOverviewOption(t *testing.T) {
 	req := RouteRequest{
-		Overview: OverviewFull,
+		Overview:         OverviewFull,
+		ContinueStraight: ContinueStraightTrue,
 	}
 	assert.Equal(
 		t,
@@ -39,9 +41,10 @@ func TestRouteRequestOverviewOption(t *testing.T) {
 
 func TestRouteRequestGeometryOption(t *testing.T) {
 	req := RouteRequest{
-		Geometries:  GeometriesPolyline6,
-		Annotations: AnnotationsFalse,
-		Steps:       StepsFalse,
+		Geometries:       GeometriesPolyline6,
+		Annotations:      AnnotationsFalse,
+		Steps:            StepsFalse,
+		ContinueStraight: ContinueStraightTrue,
 	}
 	assert.Equal(
 		t,

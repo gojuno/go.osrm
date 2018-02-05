@@ -62,12 +62,14 @@ func TestErrorOnRouteRequest(t *testing.T) {
 	osrm := NewFromURL(ts.URL)
 
 	r, err := osrm.Route(context.Background(), RouteRequest{
-		Profile:     "car",
-		GeoPath:     geoPath,
-		Annotations: AnnotationsFalse,
-		Steps:       StepsFalse,
-		Geometries:  GeometriesPolyline6,
-		Overview:    OverviewFalse})
+		Profile:          "car",
+		GeoPath:          geoPath,
+		Annotations:      AnnotationsFalse,
+		Steps:            StepsFalse,
+		Geometries:       GeometriesPolyline6,
+		Overview:         OverviewFalse,
+		ContinueStraight: ContinueStraightTrue,
+	})
 
 	require.NotNil(t, err)
 	assert.Equal(t, ErrorCodeNoRoute, err.(ResponseError).ErrCode())
@@ -85,11 +87,12 @@ func TestRouteRequest(t *testing.T) {
 	osrm := NewFromURL(ts.URL)
 
 	r, err := osrm.Route(context.Background(), RouteRequest{
-		Profile:     "car",
-		GeoPath:     geoPath,
-		Annotations: AnnotationsTrue,
-		Geometries:  GeometriesPolyline6,
-		Overview:    OverviewFull,
+		Profile:          "car",
+		GeoPath:          geoPath,
+		Annotations:      AnnotationsTrue,
+		Geometries:       GeometriesPolyline6,
+		Overview:         OverviewFull,
+		ContinueStraight: ContinueStraightTrue,
 	})
 
 	require := require.New(t)
