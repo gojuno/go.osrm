@@ -2,6 +2,7 @@ package osrm
 
 import (
 	"context"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -33,7 +34,12 @@ func (t DefaultTransport) Get(ctx context.Context, url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer closeSilently(resp.Body)
 
 	return ioutil.ReadAll(resp.Body)
+}
+
+func closeSilently(c io.Closer) {
+	// #nosec - make github.com/GoASTScanner/gas linter ignore this
+	_ = c.Close() // nothing meaningful to do with this error - so ignore and suppress linter warnings
 }
