@@ -4,13 +4,14 @@ import geo "github.com/paulmach/go.geo"
 
 // RouteRequest represents a request to the route method
 type RouteRequest struct {
-	Profile     string
-	GeoPath     GeoPath
-	Bearings    []Bearing
-	Steps       Steps
-	Annotations Annotations
-	Overview    Overview
-	Geometries  Geometries
+	Profile          string
+	GeoPath          GeoPath
+	Bearings         []Bearing
+	Steps            Steps
+	Annotations      Annotations
+	Overview         Overview
+	Geometries       Geometries
+	ContinueStraight ContinueStraight
 }
 
 // RouteResponse represents a response from the route method
@@ -65,7 +66,10 @@ type StepManeuver struct {
 
 func (r RouteRequest) request() *request {
 	opts := stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries)
-	opts.Set("continue_straight", "true")
+
+	if cs := r.ContinueStraight.String(); cs != "" {
+		opts.Set("continue_straight", cs)
+	}
 
 	if len(r.Bearings) > 0 {
 		opts.Set("bearings", bearings(r.Bearings))

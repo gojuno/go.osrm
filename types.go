@@ -109,6 +109,21 @@ func (o Overview) String() string {
 	return string(o)
 }
 
+// ContinueStraight represents continue_straight OSRM routing parameter
+type ContinueStraight string
+
+// ContinueStraight values
+const (
+	ContinueStraightDefault ContinueStraight = "default"
+	ContinueStraightTrue    ContinueStraight = "true"
+	ContinueStraightFalse   ContinueStraight = "false"
+)
+
+// String returns ContinueStraight as string
+func (c ContinueStraight) String() string {
+	return string(c)
+}
+
 // request contains parameters for OSRM query
 type request struct {
 	profile string
