@@ -52,12 +52,14 @@ func (opts options) Encode() string {
 	if opts == nil {
 		return ""
 	}
-	var buf []byte
+
 	keys := make([]string, 0, len(opts))
 	for k := range opts {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
+
+	var buf []byte
 	for _, k := range keys {
 		vals := opts[k]
 		if len(buf) > 0 {
