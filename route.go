@@ -1,6 +1,10 @@
 package osrm
 
-import geo "github.com/paulmach/go.geo"
+import (
+	"fmt"
+
+	geo "github.com/paulmach/go.geo"
+)
 
 // RouteRequest represents a request to the route method
 type RouteRequest struct {
@@ -65,11 +69,8 @@ type StepManeuver struct {
 }
 
 func (r RouteRequest) request() *request {
-	opts := stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries)
-
-	if cs := r.ContinueStraight.String(); cs != "" {
-		opts.set("continue_straight", cs)
-	}
+	opts := stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries).
+		setStringer("continue_straight", r.ContinueStraight)
 
 	if len(r.Bearings) > 0 {
 		opts.set("bearings", bearings(r.Bearings))
@@ -96,9 +97,9 @@ func stepsOptions(steps Steps, annotations Annotations, overview Overview, geome
 		setStringer("overview", overview)
 }
 
-func valueOrDefault(geometries, def Geometries) Geometries {
-	if geometries != "" {
-		return geometries
+func valueOrDefault(value, def fmt.Stringer) fmt.Stringer {
+	if value.String() == "" {
+		return def
 	}
-	return def
+	return value
 }

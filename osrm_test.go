@@ -23,7 +23,7 @@ var geoPath = *NewGeoPathFromPointSet(
 	}))
 
 func fixturedJSON(name string) []byte {
-	data, err := ioutil.ReadFile("test_fixtures/" + name + ".json")
+	data, err := ioutil.ReadFile("test_data/" + name + ".json")
 	if err != nil {
 		log.Fatalf("osrm5: failed to load a fixture %s, err: %s", name, err)
 	}
