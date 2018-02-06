@@ -47,10 +47,7 @@ func (o OSRM) query(ctx context.Context, in *request, out response) error {
 	if err := o.client.doRequest(ctx, in, out); err != nil {
 		return err
 	}
-	if err := out.apiError(); err != nil {
-		return err
-	}
-	return nil
+	return out.apiError()
 }
 
 // Route searches the shortest path between given coordinates.
