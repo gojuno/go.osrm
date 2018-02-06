@@ -68,11 +68,11 @@ func (r RouteRequest) request() *request {
 	opts := stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries)
 
 	if cs := r.ContinueStraight.String(); cs != "" {
-		opts.Set("continue_straight", cs)
+		opts.set("continue_straight", cs)
 	}
 
 	if len(r.Bearings) > 0 {
-		opts.Set("bearings", bearings(r.Bearings))
+		opts.set("bearings", bearings(r.Bearings))
 	}
 
 	return &request{
@@ -87,20 +87,20 @@ func stepsOptions(s Steps, a Annotations, o Overview, g Geometries) options {
 	opts := options{}
 
 	if steps := s.String(); steps != "" {
-		opts.Set("steps", steps)
+		opts.set("steps", steps)
 	}
 
 	if annotations := a.String(); annotations != "" {
-		opts.Set("annotations", annotations)
+		opts.set("annotations", annotations)
 	}
 
-	opts.Set("geometries", GeometriesPolyline6.String())
+	opts.set("geometries", GeometriesPolyline6.String())
 	if geometries := g.String(); geometries != "" {
-		opts.Set("geometries", geometries)
+		opts.set("geometries", geometries)
 	}
 
 	if overview := o.String(); overview != "" {
-		opts.Set("overview", overview)
+		opts.set("overview", overview)
 	}
 
 	return opts

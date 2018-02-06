@@ -11,7 +11,7 @@ func TestEmptyRouteRequestOptions(t *testing.T) {
 	assert.Equal(
 		t,
 		"geometries=polyline6",
-		req.request().options.Encode())
+		req.request().options.encode())
 }
 
 func TestRouteRequestOptionsWithBearings(t *testing.T) {
@@ -25,7 +25,7 @@ func TestRouteRequestOptionsWithBearings(t *testing.T) {
 	assert.Equal(
 		t,
 		"bearings=60%2C380%3B45%2C180&continue_straight=true&geometries=polyline6",
-		req.request().options.Encode())
+		req.request().options.encode())
 }
 
 func TestRouteRequestOverviewOption(t *testing.T) {
@@ -36,7 +36,7 @@ func TestRouteRequestOverviewOption(t *testing.T) {
 	assert.Equal(
 		t,
 		"continue_straight=true&geometries=polyline6&overview=full",
-		req.request().options.Encode())
+		req.request().options.encode())
 }
 
 func TestRouteRequestGeometryOption(t *testing.T) {
@@ -49,5 +49,5 @@ func TestRouteRequestGeometryOption(t *testing.T) {
 	assert.Equal(
 		t,
 		"annotations=false&continue_straight=true&geometries=polyline6&steps=false",
-		req.request().options.Encode())
+		req.request().options.encode())
 }

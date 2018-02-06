@@ -56,7 +56,7 @@ func TestRequestURLWithEmptyOptions(t *testing.T) {
 
 func TestRequestURLWithOptions(t *testing.T) {
 	opts := options{}
-	opts.Set("baz", "quux")
+	opts.set("baz", "quux")
 	req := request{
 		profile: "something",
 		geoPath: geoPath,

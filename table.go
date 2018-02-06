@@ -20,10 +20,10 @@ type tableResponseOrError struct {
 func (r TableRequest) request() *request {
 	opts := options{}
 	if len(r.Sources) > 0 {
-		opts.AddInt("sources", r.Sources...)
+		opts.addInt("sources", r.Sources...)
 	}
 	if len(r.Destinations) > 0 {
-		opts.AddInt("destinations", r.Destinations...)
+		opts.addInt("destinations", r.Destinations...)
 	}
 
 	return &request{

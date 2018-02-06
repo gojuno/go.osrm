@@ -8,7 +8,7 @@ import (
 
 func TestEmptyTableRequestOptions(t *testing.T) {
 	req := TableRequest{}
-	assert.Empty(t, req.request().options.Encode())
+	assert.Empty(t, req.request().options.encode())
 }
 
 func TestNotEmptyTableRequestOptions(t *testing.T) {
@@ -16,5 +16,5 @@ func TestNotEmptyTableRequestOptions(t *testing.T) {
 		Sources:      []int{0, 1, 2},
 		Destinations: []int{1, 3},
 	}
-	assert.Equal(t, "destinations=1;3&sources=0;1;2", req.request().options.Encode())
+	assert.Equal(t, "destinations=1;3&sources=0;1;2", req.request().options.encode())
 }

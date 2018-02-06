@@ -42,13 +42,13 @@ func (r MatchRequest) request() *request {
 		r.Gaps,
 	)
 	if len(r.Timestamps) > 0 {
-		options.AddInt64("timestamps", r.Timestamps...)
+		options.addInt64("timestamps", r.Timestamps...)
 	}
 	if len(r.Radiuses) > 0 {
-		options.AddFloat("radiuses", r.Radiuses...)
+		options.addFloat("radiuses", r.Radiuses...)
 	}
 	if len(r.Hints) > 0 {
-		options.Add("hints", r.Hints...)
+		options.add("hints", r.Hints...)
 	}
 
 	return &request{
@@ -70,11 +70,11 @@ type Waypoint struct {
 
 func matcherOptions(options options, t Tidy, g Gaps) options {
 	if tidy := t.String(); tidy != "" {
-		options.Set("tidy", tidy)
+		options.set("tidy", tidy)
 	}
 
 	if gaps := g.String(); gaps != "" {
-		options.Set("gaps", gaps)
+		options.set("gaps", gaps)
 	}
 	return options
 }

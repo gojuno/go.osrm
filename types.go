@@ -168,7 +168,7 @@ func (r *request) URL(serverURL string) (string, error) {
 		"polyline(" + r.geoPath.Polyline() + ")", // coordinates
 	}, "/")
 	if len(r.options) > 0 {
-		url += "?" + r.options.Encode() // options
+		url += "?" + r.options.encode() // options
 	}
 	return url, nil
 }

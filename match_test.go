@@ -55,7 +55,7 @@ func TestEmptyMatchRequestOptions(t *testing.T) {
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			assert.Equal(t, c.expectedURI, c.request.request().options.Encode())
+			assert.Equal(t, c.expectedURI, c.request.request().options.encode())
 		})
 	}
 }
