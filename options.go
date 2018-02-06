@@ -61,13 +61,12 @@ func (opts options) encode() string {
 
 	var buf []byte
 	for _, k := range keys {
-		vals := opts[k]
 		if len(buf) > 0 {
 			buf = append(buf, '&')
 		}
 		buf = append(buf, url.QueryEscape(k)...)
 		buf = append(buf, '=')
-		for n, val := range vals {
+		for n, val := range opts[k] {
 			if n > 0 {
 				buf = append(buf, ';')
 			}
