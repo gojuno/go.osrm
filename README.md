@@ -39,13 +39,11 @@ func main() {
 	defer cancelFn()
 
 	resp, err := client.Route(ctx, osrm.RouteRequest{
-		Request: osrm.Request{
-			Profile: "car",
-			GeoPath: *osrm.NewGeoPathFromPointSet(geo.PointSet{
-				{-73.980020, 40.751739},
-				{-73.962662, 40.794156},
-			}),
-		},
+		Profile: "car",
+		GeoPath: *osrm.NewGeoPathFromPointSet(geo.PointSet{
+			{-73.980020, 40.751739},
+			{-73.962662, 40.794156},
+		}),
 		Steps:       osrm.StepsTrue,
 		Annotations: osrm.AnnotationsTrue,
 		Overview:    osrm.OverviewFalse,
