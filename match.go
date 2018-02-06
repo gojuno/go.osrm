@@ -68,13 +68,8 @@ type Waypoint struct {
 	Hint              string    `json:"hint"`
 }
 
-func matcherOptions(options options, t Tidy, g Gaps) options {
-	if tidy := t.String(); tidy != "" {
-		options.set("tidy", tidy)
-	}
-
-	if gaps := g.String(); gaps != "" {
-		options.set("gaps", gaps)
-	}
-	return options
+func matcherOptions(options options, tidy Tidy, gaps Gaps) options {
+	return options.
+		setStringer("tidy", tidy).
+		setStringer("gaps", gaps)
 }

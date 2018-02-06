@@ -83,25 +83,17 @@ func (r RouteRequest) request() *request {
 	}
 }
 
-func stepsOptions(s Steps, a Annotations, o Overview, g Geometries) options {
-	opts := options{}
+func stepsOptions(steps Steps, annotations Annotations, overview Overview, geometries Geometries) options {
+	return options{}.
+		setStringer("steps", steps).
+		setStringer("annotations", annotations).
+		setStringer("geometries", valueOrDefault(geometries, GeometriesPolyline6)).
+		setStringer("overview", overview)
+}
 
-	if steps := s.String(); steps != "" {
-		opts.set("steps", steps)
+func valueOrDefault(geometries, def Geometries) Geometries {
+	if geometries != "" {
+		return geometries
 	}
-
-	if annotations := a.String(); annotations != "" {
-		opts.set("annotations", annotations)
-	}
-
-	opts.set("geometries", GeometriesPolyline6.String())
-	if geometries := g.String(); geometries != "" {
-		opts.set("geometries", geometries)
-	}
-
-	if overview := o.String(); overview != "" {
-		opts.set("overview", overview)
-	}
-
-	return opts
+	return def
 }
