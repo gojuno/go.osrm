@@ -3,33 +3,27 @@ package osrm
 import (
 	"context"
 	"encoding/json"
-	"time"
 )
 
-// Client makes a real query to OSRM server
-type Client struct {
-	Transport
+// client makes a real query to OSRM server
+type client struct {
+	transport
 
 	serverURL string
 }
 
-// NewClient creates a client with server url and specific getter
-func NewClient(serverURL string, t Transport) Client {
-	return Client{Transport: t, serverURL: serverURL}
-}
-
-// NewClientWithTimeout creates a client with http.Client
-func NewClientWithTimeout(serverURL string, timeout time.Duration) Client {
-	return NewClient(serverURL, NewDefaultTransport(timeout))
+// newClient creates a client with server url and specific getter
+func newClient(serverURL string, t transport) client {
+	return client{transport: t, serverURL: serverURL}
 }
 
 // doRequest makes GET request to OSRM server and decodes the given JSON
-func (c Client) doRequest(ctx context.Context, in *request, out interface{}) error {
+func (c client) doRequest(ctx context.Context, in *request, out interface{}) error {
 	url, err := in.URL(c.serverURL)
 	if err != nil {
 		return err
 	}
-	bytes, err := c.Get(ctx, url)
+	bytes, err := c.get(ctx, url)
 	if err != nil {
 		return err
 	}

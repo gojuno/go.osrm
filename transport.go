@@ -5,32 +5,32 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
-// Transport makes GET request
-type Transport interface {
-	Get(ctx context.Context, url string) ([]byte, error)
+// HTTPClient defines minimal interface necessary for making HTTP requests.
+// Standard library http.Client{} implements this interface.
+type HTTPClient interface {
+	Do(*http.Request) (*http.Response, error)
 }
 
-// DefaultTransport is default transport implementation based on http.Client
-type DefaultTransport struct {
-	http.Client
+// transport makes GET request
+type transport interface {
+	get(ctx context.Context, url string) ([]byte, error)
 }
 
-// NewDefaultTransport creates new default transport based on http.Client with given timeout
-func NewDefaultTransport(timeout time.Duration) *DefaultTransport {
-	return &DefaultTransport{http.Client{Timeout: timeout}}
+// defaultTransport is default transport implementation based on http.Client
+type defaultTransport struct {
+	httpClient HTTPClient
 }
 
-// Get implements Transport interface
-func (t DefaultTransport) Get(ctx context.Context, url string) ([]byte, error) {
+// get implements Transport interface
+func (t defaultTransport) get(ctx context.Context, url string) ([]byte, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := t.Client.Do(req.WithContext(ctx))
+	resp, err := t.httpClient.Do(req.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}

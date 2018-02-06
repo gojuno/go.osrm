@@ -2,6 +2,7 @@ package osrm
 
 import (
 	"context"
+	"net/http"
 	"time"
 )
 
@@ -16,31 +17,51 @@ const (
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md for details.
 // TODO: implement (nearest, trip, tile) methods
 type OSRM struct {
-	client Client
+	client client
+}
+
+// Config represents OSRM client configuration options
+type Config struct {
+	// ServerURL is OSRM server URL to be used for queries.
+	// Local http://127.0.0.1:5000 URL will be used as default if not set.
+	ServerURL string
+	// Client is custom pre-configured http client to be used for queries.
+	// New http.Client instance with default settings and one second timeout will be used if not set.
+	Client HTTPClient
 }
 
 type response interface {
 	apiError() error
 }
 
-// New creates a client with default server url
+// New creates a client with default server url and default timeout
 func New() *OSRM {
-	return NewFromURL(defaultServerURL)
+	return NewWithConfig(Config{})
 }
 
-// NewFromURL creates a client with custom server url
+// NewFromURL creates a client with custom server url and default timeout
 func NewFromURL(serverURL string) *OSRM {
-	return NewFromURLWithTimeout(serverURL, defaultTimeout)
+	return NewWithConfig(Config{ServerURL: serverURL})
 }
 
 // NewFromURLWithTimeout creates a client with custom timeout connection
 func NewFromURLWithTimeout(serverURL string, timeout time.Duration) *OSRM {
-	return NewWithClient(NewClientWithTimeout(serverURL, timeout))
+	return NewWithConfig(Config{
+		ServerURL: serverURL,
+		Client:    &http.Client{Timeout: timeout},
+	})
 }
 
-// NewWithClient creates a client with custom transport layer
-func NewWithClient(client Client) *OSRM {
-	return &OSRM{client}
+// NewWithConfig creates a client with given config
+func NewWithConfig(cfg Config) *OSRM {
+	if cfg.ServerURL == "" {
+		cfg.ServerURL = defaultServerURL
+	}
+	if cfg.Client == nil {
+		cfg.Client = &http.Client{Timeout: defaultTimeout}
+	}
+
+	return &OSRM{client: newClient(cfg.ServerURL, &defaultTransport{httpClient: cfg.Client})}
 }
 
 func (o OSRM) query(ctx context.Context, in *request, out response) error {
