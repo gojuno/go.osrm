@@ -59,6 +59,11 @@ func (r MatchRequest) request() *request {
 	}
 }
 
+// URL generates a url for OSRM match request
+func (r MatchRequest) URL(serverURL string) (string, error) {
+	return r.request().URL(serverURL)
+}
+
 // Waypoint represents a matched point on a route
 type Waypoint struct {
 	Index             int       `json:"waypoint_index"`

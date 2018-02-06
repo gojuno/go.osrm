@@ -33,3 +33,8 @@ func (r TableRequest) request() *request {
 		options: opts,
 	}
 }
+
+// URL generates a url for OSRM table request
+func (r TableRequest) URL(serverURL string) (string, error) {
+	return r.request().URL(serverURL)
+}
