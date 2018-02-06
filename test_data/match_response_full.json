@@ -1,0 +1,216 @@
+{
+    "code": "Ok",
+    "matchings": [{
+        "confidence": 0.023898,
+        "legs": [{
+            "annotation": {
+                "duration": [1, 10.8, 17.1, 4.8, 4.5, 2.8, 0.6, 0.3, 0.2, 0.4, 2.3],
+                "distance": [8.302856, 93.339232, 138.035035, 73.126776, 68.597314, 42.73246, 9.040305, 4.059832, 2.87742, 6.385484, 35.792593]
+            },
+            "duration": 44.8,
+            "summary": "",
+            "distance": 482.3,
+            "steps": [{
+                "intersections": [{
+                    "out": 0,
+                    "entry": [true],
+                    "bearings": [15],
+                    "location": [-73.990195, 40.714703]
+                }, {
+                    "out": 0,
+                    "location": [-73.989754, 40.715553],
+                    "bearings": [15, 195, 285],
+                    "entry": [true, false, true],
+                    "in": 1
+                }],
+                "geometry": "{aowFverbMOEyCsAgFuB",
+                "maneuver": {
+                    "bearing_after": 15,
+                    "location": [-73.990195, 40.714703],
+                    "bearing_before": 0,
+                    "type": "depart"
+                },
+                "duration": 28.9,
+                "distance": 239.7,
+                "name": "",
+                "mode": "driving"
+            }, {
+                "intersections": [{
+                    "out": 3,
+                    "location": [-73.989155, 40.716708],
+                    "bearings": [15, 120, 195, 300],
+                    "entry": [true, true, false, true],
+                    "in": 2
+                }, {
+                    "out": 3,
+                    "location": [-73.98995, 40.716971],
+                    "bearings": [15, 120, 195, 285],
+                    "entry": [true, false, true, true],
+                    "in": 1
+                }, {
+                    "out": 3,
+                    "location": [-73.990705, 40.717201],
+                    "bearings": [15, 105, 195, 285],
+                    "entry": [true, false, true, true],
+                    "in": 1
+                }, {
+                    "out": 3,
+                    "location": [-73.991176, 40.717343],
+                    "bearings": [15, 105, 195, 300],
+                    "entry": [true, false, true, true],
+                    "in": 1
+                }, {
+                    "out": 3,
+                    "location": [-73.991422, 40.717418],
+                    "bearings": [15, 105, 195, 285],
+                    "entry": [true, false, true, true],
+                    "in": 1
+                }],
+                "geometry": "mnowFf_rbMs@|Cm@vC[|AGPAHADCLWnA",
+                "maneuver": {
+                    "bearing_after": 294,
+                    "type": "turn",
+                    "modifier": "left",
+                    "bearing_before": 21,
+                    "location": [-73.989155, 40.716708]
+                },
+                "duration": 15.9,
+                "distance": 242.6,
+                "name": "",
+                "mode": "driving"
+            }, {
+                "intersections": [{
+                    "in": 0,
+                    "entry": [true],
+                    "bearings": [112],
+                    "location": [-73.991817, 40.717536]
+                }],
+                "geometry": "ssowFzorbM",
+                "maneuver": {
+                    "bearing_after": 0,
+                    "location": [-73.991422, 40.717418],
+                    "bearing_before": 292,
+                    "type": "arrive"
+                },
+                "duration": 0,
+                "distance": 0,
+                "name": "",
+                "mode": "driving"
+            }]
+        }, {
+            "annotation": {
+                "duration": [2.4, 0.4, 0.2, 0.3, 0.6, 2.8, 4.5, 4.8, 1.2, 3.4, 4.3, 4.1, 0.2, 4.2, 0.4],
+                "distance": [35.792593, 6.385484, 2.87742, 4.059832, 9.040305, 42.73246, 68.597314, 73.126776, 18.049393, 52.706919, 75.410609, 71.037791, 2.79859, 74.149914, 16.241881]
+            },
+            "duration": 34.2,
+            "summary": "",
+            "distance": 553,
+            "steps": [{
+                "intersections": [{
+                    "out": 0,
+                    "entry": [true],
+                    "bearings": [112],
+                    "location": [-73.991817, 40.717536]
+                }, {
+                    "out": 1,
+                    "location": [-73.991422, 40.717418],
+                    "bearings": [15, 105, 195, 285],
+                    "entry": [true, true, true, false],
+                    "in": 3
+                }, {
+                    "out": 1,
+                    "location": [-73.991176, 40.717343],
+                    "bearings": [15, 105, 195, 300],
+                    "entry": [true, true, true, false],
+                    "in": 3
+                }, {
+                    "out": 1,
+                    "location": [-73.990705, 40.717201],
+                    "bearings": [15, 105, 195, 285],
+                    "entry": [true, true, true, false],
+                    "in": 3
+                }, {
+                    "out": 1,
+                    "location": [-73.98995, 40.716971],
+                    "bearings": [15, 120, 195, 285],
+                    "entry": [true, true, true, false],
+                    "in": 3
+                }, {
+                    "out": 1,
+                    "location": [-73.989155, 40.716708],
+                    "bearings": [15, 120, 195, 300],
+                    "entry": [true, true, true, false],
+                    "in": 3
+                }, {
+                    "out": 1,
+                    "location": [-73.988389, 40.716448],
+                    "bearings": [15, 105, 300],
+                    "entry": [true, true, false],
+                    "in": 2
+                }, {
+                    "out": 1,
+                    "location": [-73.987557, 40.716199],
+                    "bearings": [15, 105, 285],
+                    "entry": [true, true, false],
+                    "in": 2
+                }, {
+                    "out": 1,
+                    "location": [-73.986743, 40.715954],
+                    "bearings": [30, 105, 195, 285],
+                    "entry": [true, true, true, false],
+                    "in": 3
+                }],
+                "geometry": "ssowFzorbMVoABM@E@IFQZ}Al@wCr@}CLg@d@qBp@eDn@}C@En@aDHc@",
+                "maneuver": {
+                    "bearing_after": 112,
+                    "location": [-73.991817, 40.717536],
+                    "bearing_before": 0,
+                    "type": "depart"
+                },
+                "duration": 34.2,
+                "distance": 553,
+                "name": "",
+                "mode": "driving"
+            }, {
+                "intersections": [{
+                    "in": 0,
+                    "entry": [true],
+                    "bearings": [292],
+                    "location": [-73.985746, 40.715655]
+                }],
+                "geometry": "{gowF|iqbM",
+                "maneuver": {
+                    "bearing_after": 0,
+                    "location": [-73.986743, 40.715954],
+                    "bearing_before": 112,
+                    "type": "arrive"
+                },
+                "duration": 0,
+                "distance": 0,
+                "name": "",
+                "mode": "driving"
+            }]
+        }],
+        "duration": 79,
+        "distance": 1035.3
+    }],
+    "tracepoints": [{
+        "waypoint_index": 0,
+        "location": [-73.990195, 40.714703],
+        "name": "",
+        "hint": "ZUQGgDVLBgAAAAAADgAAAAkAAAAYAAAAbAAAACqYdgApmHYAAgAAAM3_lvvPQW0C3P-W-8xBbQIBAAEBt2xXEQ==",
+        "matchings_index": 0
+    }, {
+        "waypoint_index": 1,
+        "location": [-73.991817, 40.717536],
+        "name": "",
+        "hint": "vSwGgJc_BoAAAAAAFwAAABcAAAAAAAAAAAAAAHzinABa75wAAgAAAHf5lvvgTG0CiPmW-wJNbQIAAAEBt2xXEQ==",
+        "matchings_index": 0
+    }, {
+        "waypoint_index": 2,
+        "location": [-73.985746, 40.715655],
+        "name": "",
+        "hint": "JT8GAOJDBoAAAAAABAAAAAgAAAAhAAAAKgAAAAvdlQBOygQAAgAAAC4Rl_uHRW0CKhGX-4JFbQIEAAEBt2xXEQ==",
+        "matchings_index": 0
+    }]
+}
