@@ -73,7 +73,7 @@ func TestErrorOnRouteRequest(t *testing.T) {
 
 	require.NotNil(t, err)
 	assert.Equal(t, ErrorCodeNoRoute, err.(ResponseError).ErrCode())
-	assert.Equal(t, "no route to coordinates", err.Error())
+	assert.Equal(t, "NoRoute - no route to coordinates", err.Error())
 	assert.Nil(t, r)
 }
 

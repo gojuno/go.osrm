@@ -37,7 +37,7 @@ func (err ResponseError) ErrCode() string {
 }
 
 func (err ResponseError) Error() string {
-	return err.Message
+	return err.Code + " - " + err.Message
 }
 
 type responseStatus struct {
