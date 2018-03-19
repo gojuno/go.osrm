@@ -2,6 +2,7 @@ package osrm
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 
 // HTTPClient defines minimal interface necessary for making HTTP requests.
 // Standard library http.Client{} implements this interface.
+// A non-2xx status code doesn't cause an error.
 type HTTPClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
@@ -35,6 +37,10 @@ func (t defaultTransport) get(ctx context.Context, url string) ([]byte, error) {
 		return nil, err
 	}
 	defer closeSilently(resp.Body)
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("http code %d is not OK", resp.StatusCode)
+	}
 
 	return ioutil.ReadAll(resp.Body)
 }
