@@ -61,7 +61,7 @@ func NewWithConfig(cfg Config) *OSRM {
 		cfg.Client = &http.Client{Timeout: defaultTimeout}
 	}
 
-	return &OSRM{client: newClient(cfg.ServerURL, &defaultTransport{httpClient: cfg.Client})}
+	return &OSRM{client: newClient(cfg.ServerURL, cfg.Client)}
 }
 
 func (o OSRM) query(ctx context.Context, in *request, out response) error {
