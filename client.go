@@ -42,8 +42,8 @@ func (c client) doRequest(ctx context.Context, in *request, out interface{}) err
 	}
 	defer closeSilently(resp.Body)
 
-	// OSRM returns HTTP status code 200 in case of success or HTTP status code 400 in case of error
-	// In other cases it has to return error
+	// OSRM returns both codes 200 and 400 in a case with a body.
+	// In other cases, it returns an unexpected error without a body.
 	// http://project-osrm.org/docs/v5.5.1/api/#requests
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusBadRequest {
 		return fmt.Errorf("unexpected http status code %d", resp.StatusCode)
@@ -68,12 +68,7 @@ func (c client) get(ctx context.Context, url string) (*http.Response, error) {
 		return nil, err
 	}
 
-	resp, err := c.httpClient.Do(req.WithContext(ctx))
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, nil
+	return c.httpClient.Do(req.WithContext(ctx))
 }
 
 func closeSilently(c io.Closer) {
