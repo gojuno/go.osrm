@@ -11,13 +11,7 @@ import (
 )
 
 func Test_getWithError(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(500)
-		fmt.Fprint(w, "something wrong")
-	}))
-	defer ts.Close()
-
-	c := newClient("/", ts.Client())
+	c := newClient("/", &http.Client{})
 	b, err := c.get(context.Background(), "/")
 	require.Nil(t, b)
 	require.NotNil(t, err)
@@ -30,7 +24,7 @@ func Test_doRequestWithBadHTTPCode(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	c := newClient(ts.URL, ts.Client())
+	c := newClient(ts.URL, &http.Client{})
 	req := request{
 		profile: "something",
 		geoPath: geoPath,
@@ -46,7 +40,7 @@ func Test_doRequestWithBodyUnmarshalFailure(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	c := newClient(ts.URL, ts.Client())
+	c := newClient(ts.URL, &http.Client{})
 	req := request{
 		profile: "something",
 		geoPath: geoPath,
