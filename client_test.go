@@ -48,7 +48,7 @@ func Test_doRequestWithBadHTTPCode(t *testing.T) {
 		service: "foobar",
 	}
 	err := c.doRequest(context.Background(), &req, nil)
-	require.EqualError(t, err, "unexpected http status code 500")
+	require.EqualError(t, err, "unexpected http status code 500 with body \"\"")
 }
 
 func Test_doRequestWithBodyReadingFailure(t *testing.T) {

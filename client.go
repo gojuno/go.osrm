@@ -42,16 +42,16 @@ func (c client) doRequest(ctx context.Context, in *request, out interface{}) err
 	}
 	defer closeSilently(resp.Body)
 
-	// OSRM returns both codes 200 and 400 in a case with a body.
-	// In other cases, it returns an unexpected error without a body.
-	// http://project-osrm.org/docs/v5.5.1/api/#requests
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusBadRequest {
-		return fmt.Errorf("unexpected http status code %d", resp.StatusCode)
-	}
-
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return fmt.Errorf("failed to read body: %v", err)
+	}
+
+	// OSRM returns both codes 200 and 400 in a case with a body.
+	// In other cases, it returns an unexpected error without a body.
+	// http://project-osrm.org/docs/v5.5.1/api/#responses
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusBadRequest {
+		return fmt.Errorf("unexpected http status code %d with body %q", resp.StatusCode, bytes)
 	}
 
 	if err := json.Unmarshal(bytes, out); err != nil {
@@ -61,7 +61,6 @@ func (c client) doRequest(ctx context.Context, in *request, out interface{}) err
 	return nil
 }
 
-// get implements Transport interface
 func (c client) get(ctx context.Context, url string) (*http.Response, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
