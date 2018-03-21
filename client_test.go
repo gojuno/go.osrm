@@ -39,6 +39,7 @@ func Test_doRequestWithBadHTTPCode(t *testing.T) {
 		w.WriteHeader(500)
 		fmt.Fprint(w, "<html><head>")
 	}))
+	defer ts.Close()
 
 	c := newClient(ts.URL, ts.Client())
 	req := request{
@@ -54,6 +55,7 @@ func Test_doRequestWithBodyUnmarshalFailure(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 	}))
+	defer ts.Close()
 
 	c := newClient(ts.URL, ts.Client())
 	req := request{
