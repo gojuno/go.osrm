@@ -2,9 +2,10 @@ package osrm
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -21,65 +22,40 @@ func (m mockReadCloser) Read(p []byte) (int, error) {
 }
 
 func Test_getWithError(t *testing.T) {
-	httpClientMock := NewHTTPClientMock(t)
-	defer httpClientMock.MinimockFinish()
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(500)
+		fmt.Fprint(w, "something wrong")
+	}))
+	defer ts.Close()
 
-	httpClientMock.DoMock.Return(nil, errors.New("something wrong"))
-
-	c := newClient("/", httpClientMock)
+	c := newClient("/", ts.Client())
 	b, err := c.get(context.Background(), "/")
 	require.Nil(t, b)
 	require.NotNil(t, err)
 }
 
 func Test_doRequestWithBadHTTPCode(t *testing.T) {
-	httpClientMock := NewHTTPClientMock(t)
-	defer httpClientMock.MinimockFinish()
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(500)
+		fmt.Fprint(w, "<html><head>")
+	}))
 
-	httpClientMock.DoMock.Return(&http.Response{
-		StatusCode: 500,
-		Body:       mockReadCloser{},
-	}, nil)
-
-	c := newClient("/", httpClientMock)
+	c := newClient(ts.URL, ts.Client())
 	req := request{
 		profile: "something",
 		geoPath: geoPath,
 		service: "foobar",
 	}
 	err := c.doRequest(context.Background(), &req, nil)
-	require.EqualError(t, err, "unexpected http status code 500 with body \"\"")
-}
-
-func Test_doRequestWithBodyReadingFailure(t *testing.T) {
-	httpClientMock := NewHTTPClientMock(t)
-	defer httpClientMock.MinimockFinish()
-
-	httpClientMock.DoMock.Return(&http.Response{
-		StatusCode: 200,
-		Body:       mockReadCloser{readError: true},
-	}, nil)
-
-	c := newClient("/", httpClientMock)
-	req := request{
-		profile: "something",
-		geoPath: geoPath,
-		service: "foobar",
-	}
-	err := c.doRequest(context.Background(), &req, nil)
-	require.EqualError(t, err, "failed to read body: unexpected EOF")
+	require.EqualError(t, err, "unexpected http status code 500 with body \"<html><head>\"")
 }
 
 func Test_doRequestWithBodyUnmarshalFailure(t *testing.T) {
-	httpClientMock := NewHTTPClientMock(t)
-	defer httpClientMock.MinimockFinish()
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+	}))
 
-	httpClientMock.DoMock.Return(&http.Response{
-		StatusCode: 200,
-		Body:       mockReadCloser{},
-	}, nil)
-
-	c := newClient("/", httpClientMock)
+	c := newClient(ts.URL, ts.Client())
 	req := request{
 		profile: "something",
 		geoPath: geoPath,
