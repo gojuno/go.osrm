@@ -3,23 +3,12 @@ package osrm
 import (
 	"context"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
-
-type mockReadCloser struct{ readError bool }
-
-func (m mockReadCloser) Close() error { return nil }
-func (m mockReadCloser) Read(p []byte) (int, error) {
-	if m.readError {
-		return 0, io.ErrUnexpectedEOF
-	}
-	return 0, io.EOF
-}
 
 func Test_getWithError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
