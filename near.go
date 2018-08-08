@@ -1,5 +1,7 @@
 package osrm
 
+import geo "github.com/paulmach/go.geo"
+
 // NearRequest represents a request to the near method
 type NearRequest struct {
 	Profile  string
@@ -10,7 +12,15 @@ type NearRequest struct {
 
 // NearResponse represents a response from the near method
 type NearResponse struct {
-	Waypoints []Waypoint `json:"waypoints"`
+	Waypoints []NearWaypoint `json:"waypoints"`
+}
+
+// NearWaypoint represents a nearest point on a near query
+type NearWaypoint struct {
+	Location geo.Point `json:"location"`
+	Distance float64   `json:"distance"`
+	Name     string    `json:"name"`
+	Hint     string    `json:"hint"`
 }
 
 type nearResponseOrError struct {
