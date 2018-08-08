@@ -13,6 +13,11 @@ type NearResponse struct {
 	Waypoints []Waypoint `json:"waypoints"`
 }
 
+type nearResponseOrError struct {
+	responseStatus
+	NearResponse
+}
+
 func (r NearRequest) request() *request {
 	opts := options{}
 	opts.addInt("number", r.Number)
