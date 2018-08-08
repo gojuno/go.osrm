@@ -39,6 +39,7 @@ func (r NearRequest) request() *request {
 	return &request{
 		profile: r.Profile,
 		service: "near",
+		geoPath: r.GeoPath,
 		options: opts,
 	}
 }
