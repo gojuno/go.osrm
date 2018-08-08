@@ -101,12 +101,12 @@ func (o OSRM) Match(ctx context.Context, r MatchRequest) (*MatchResponse, error)
 	return &resp.MatchResponse, nil
 }
 
-// Near matches given GPS point to the nearest road network.
+// Nearest matches given GPS point to the nearest road network.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#service-nearest for details.
-func (o OSRM) Near(ctx context.Context, r NearRequest) (*NearResponse, error) {
-	var resp nearResponseOrError
+func (o OSRM) Nearest(ctx context.Context, r NearestRequest) (*NearestResponse, error) {
+	var resp nearestResponseOrError
 	if err := o.query(ctx, r.request(), &resp); err != nil {
 		return nil, err
 	}
-	return &resp.NearResponse, nil
+	return &resp.NearestResponse, nil
 }

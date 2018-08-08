@@ -10,9 +10,9 @@ Currently supported OSRM APIs are:
 - [Route service](https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#route-service)
 - [Table service](https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#table-service)
 - [Match service](https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#match-service)
+- [Nearest service](https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#nearest-service)
 
 Not implemeted yet:
-- [Nearest service](https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#nearest-service)
 - [Trip service](https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#trip-service)
 - [Tile service](https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#tile-service)
 

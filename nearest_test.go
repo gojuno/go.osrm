@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNearRequestOverviewOption(t *testing.T) {
-	req := NearRequest{
+func TestNearestRequestOverviewOption(t *testing.T) {
+	req := NearestRequest{
 		Number: 2,
 		Bearings: []Bearing{
 			{60, 380},
