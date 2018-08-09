@@ -102,7 +102,7 @@ func (o OSRM) Match(ctx context.Context, r MatchRequest) (*MatchResponse, error)
 }
 
 // Nearest matches given GPS point to the nearest road network.
-// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#service-nearest for details.
+// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#nearest-service for details.
 func (o OSRM) Nearest(ctx context.Context, r NearestRequest) (*NearestResponse, error) {
 	var resp nearestResponseOrError
 	if err := o.query(ctx, r.request(), &resp); err != nil {
