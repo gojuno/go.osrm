@@ -7,7 +7,8 @@ type NearestRequest struct {
 	Profile  string
 	GeoPath  GeoPath
 	Bearings []Bearing
-	Number   int
+
+	Number int
 }
 
 // NearestResponse represents a response from the nearest method
@@ -21,6 +22,7 @@ type NearestWaypoint struct {
 	Distance float64   `json:"distance"`
 	Name     string    `json:"name"`
 	Hint     string    `json:"hint"`
+	Nodes    []uint64  `json:"nodes"`
 }
 
 type nearestResponseOrError struct {

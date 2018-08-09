@@ -15,7 +15,7 @@ const (
 
 // OSRM implements the common OSRM API v5.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md for details.
-// TODO: implement (nearest, trip, tile) methods
+// TODO: implement (trip, tile) methods
 type OSRM struct {
 	client client
 }
