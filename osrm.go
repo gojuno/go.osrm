@@ -72,7 +72,7 @@ func (o OSRM) query(ctx context.Context, in *request, out response) error {
 }
 
 // Route searches the shortest path between given coordinates.
-// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#service-route for details.
+// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#route-service for details.
 func (o OSRM) Route(ctx context.Context, r RouteRequest) (*RouteResponse, error) {
 	var resp routeResponseOrError
 	if err := o.query(ctx, r.request(), &resp); err != nil {
@@ -82,7 +82,7 @@ func (o OSRM) Route(ctx context.Context, r RouteRequest) (*RouteResponse, error)
 }
 
 // Table computes duration tables for the given locations.
-// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#service-table for details.
+// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#table-service for details.
 func (o OSRM) Table(ctx context.Context, r TableRequest) (*TableResponse, error) {
 	var resp tableResponseOrError
 	if err := o.query(ctx, r.request(), &resp); err != nil {
@@ -92,7 +92,7 @@ func (o OSRM) Table(ctx context.Context, r TableRequest) (*TableResponse, error)
 }
 
 // Match matches given GPS points to the road network in the most plausible way.
-// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#service-match for details.
+// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#match-service for details.
 func (o OSRM) Match(ctx context.Context, r MatchRequest) (*MatchResponse, error) {
 	var resp matchResponseOrError
 	if err := o.query(ctx, r.request(), &resp); err != nil {
