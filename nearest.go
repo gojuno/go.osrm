@@ -7,8 +7,7 @@ type NearestRequest struct {
 	Profile  string
 	GeoPath  GeoPath
 	Bearings []Bearing
-
-	Number int
+	Number   int
 }
 
 // NearestResponse represents a response from the nearest method
@@ -32,7 +31,9 @@ type nearestResponseOrError struct {
 
 func (r NearestRequest) request() *request {
 	opts := options{}
-	opts.addInt("number", r.Number)
+	if r.Number >= 1 {
+		opts.addInt("number", r.Number)
+	}
 
 	if len(r.Bearings) > 0 {
 		opts.set("bearings", bearings(r.Bearings))

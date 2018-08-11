@@ -17,4 +17,14 @@ func TestNearestRequestOverviewOption(t *testing.T) {
 		t,
 		"bearings=60%2C380&number=2",
 		req.request().options.encode())
+
+	req = NearestRequest{
+		Bearings: []Bearing{
+			{60, 380},
+		},
+	}
+	assert.Equal(
+		t,
+		"bearings=60%2C380",
+		req.request().options.encode())
 }
