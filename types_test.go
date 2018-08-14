@@ -51,7 +51,7 @@ func TestRequestURLWithEmptyOptions(t *testing.T) {
 	}
 	url, err := req.URL("localhost")
 	require.Nil(t, err)
-	assert.Equal(t, "localhost/foobar/v1/something/polyline({aowFrerbM}PbI~Jyd@)", url)
+	assert.Equal(t, "localhost/foobar/v1/something/polyline(%7BaowFrerbM%7DPbI~Jyd@)", url)
 }
 
 func TestRequestURLWithOptions(t *testing.T) {
@@ -65,7 +65,7 @@ func TestRequestURLWithOptions(t *testing.T) {
 	}
 	url, err := req.URL("localhost")
 	require.Nil(t, err)
-	assert.Equal(t, "localhost/foobar/v1/something/polyline({aowFrerbM}PbI~Jyd@)?baz=quux", url)
+	assert.Equal(t, "localhost/foobar/v1/something/polyline(%7BaowFrerbM%7DPbI~Jyd@)?baz=quux", url)
 }
 
 func TestRequestURLWithEmptyService(t *testing.T) {

@@ -3,6 +3,7 @@ package osrm
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"strings"
 
 	"github.com/paulmach/go.geo"
@@ -165,7 +166,7 @@ func (r *request) URL(serverURL string) (string, error) {
 		r.service, // service
 		version,   // version
 		r.profile, // profile
-		"polyline(" + r.geoPath.Polyline() + ")", // coordinates
+		"polyline(" + url.PathEscape(r.geoPath.Polyline()) + ")", // coordinates
 	}, "/")
 	if len(r.options) > 0 {
 		url += "?" + r.options.encode() // options
