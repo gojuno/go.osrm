@@ -11,28 +11,29 @@ import (
 
 const polyline6Factor = 1.0e6
 
-// GeoPath represents a points set
-type GeoPath struct {
+// Geometry represents a points set
+type Geometry struct {
 	geo.Path
 }
 
-// NewGeoPathFromPointSet create a geo path from points set
-func NewGeoPathFromPointSet(s geo.PointSet) *GeoPath {
-	return &GeoPath{
-		Path: geo.Path{
-			PointSet: s,
-		},
-	}
+// NewGeometryFromPath creates a geometry from a path.
+func NewGeometryFromPath(path geo.Path) Geometry {
+	return Geometry{path}
+}
+
+// NewGeometryFromPointSet creates a geometry from points set.
+func NewGeometryFromPointSet(ps geo.PointSet) Geometry {
+	return NewGeometryFromPath(geo.Path{PointSet: ps})
 }
 
 // Polyline generates a polyline in Google format
 // It uses default factor because of OSRM5 doesn't support polyline6 as coordinates
-func (g *GeoPath) Polyline() string {
+func (g *Geometry) Polyline() string {
 	return g.Encode()
 }
 
 // UnmarshalJSON parses a geo path from points set or a polyline
-func (g *GeoPath) UnmarshalJSON(b []byte) (err error) {
+func (g *Geometry) UnmarshalJSON(b []byte) (err error) {
 	var encoded string
 	if err = json.Unmarshal(b, &encoded); err == nil {
 		g.Path = *geo.NewPathFromEncoding(encoded, polyline6Factor)
@@ -144,7 +145,7 @@ func (c ContinueStraight) String() string {
 // request contains parameters for OSRM query
 type request struct {
 	profile string
-	geoPath GeoPath
+	coords  Geometry
 	service string
 	options options
 }
@@ -157,7 +158,7 @@ func (r *request) URL(serverURL string) (string, error) {
 	if r.profile == "" {
 		return "", ErrEmptyProfileName
 	}
-	if r.geoPath.Length() == 0 {
+	if r.coords.Length() == 0 {
 		return "", ErrNoCoordinates
 	}
 	// http://{server}/{service}/{version}/{profile}/{coordinates}[.{format}]?option=value&option=value
@@ -166,7 +167,7 @@ func (r *request) URL(serverURL string) (string, error) {
 		r.service, // service
 		version,   // version
 		r.profile, // profile
-		"polyline(" + url.PathEscape(r.geoPath.Polyline()) + ")", // coordinates
+		"polyline(" + url.PathEscape(r.coords.Polyline()) + ")", // coordinates
 	}, "/")
 	if len(r.options) > 0 {
 		url += "?" + r.options.encode() // options

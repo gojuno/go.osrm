@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnmarshalGeoPathFromPointsArray(t *testing.T) {
-	gp := GeoPath{}
+func TestUnmarshalGeometryFromPointsArray(t *testing.T) {
+	gp := Geometry{}
 	jdata := []byte("[[-73.982253,40.742926],[-73.985253,40.742926]]")
 
 	err := json.Unmarshal(jdata, &gp)
@@ -21,8 +21,8 @@ func TestUnmarshalGeoPathFromPointsArray(t *testing.T) {
 	require.Equal(t, *geo.NewPointFromLatLng(40.742926, -73.985253), gp.PointSet[1])
 }
 
-func TestUnmarshalGeoPathFromPolyline(t *testing.T) {
-	gp := GeoPath{}
+func TestUnmarshalGeometryFromPolyline(t *testing.T) {
+	gp := Geometry{}
 	jdata := []byte("\"w{_tlA`a_clCkrDldB~vBcyJ\"")
 
 	err := json.Unmarshal(jdata, &gp)
@@ -34,19 +34,19 @@ func TestUnmarshalGeoPathFromPolyline(t *testing.T) {
 	require.Equal(t, *geo.NewPointFromLatLng(40.71565, -73.98575), gp.PointSet[2])
 }
 
-func TestPolylineGeoPath(t *testing.T) {
+func TestPolylineGeometry(t *testing.T) {
 	path := geo.NewPath()
 	path.Push(geo.NewPointFromLatLng(40.714701, -73.990177))
 	path.Push(geo.NewPointFromLatLng(40.717572, -73.991801))
 	path.Push(geo.NewPointFromLatLng(40.715653, -73.985752))
-	gp := GeoPath{*path}
+	gp := Geometry{*path}
 	assert.Equal(t, "{aowFrerbM}PbI~Jyd@", gp.Polyline())
 }
 
 func TestRequestURLWithEmptyOptions(t *testing.T) {
 	req := request{
 		profile: "something",
-		geoPath: geoPath,
+		coords:  geometry,
 		service: "foobar",
 	}
 	url, err := req.URL("localhost")
@@ -59,7 +59,7 @@ func TestRequestURLWithOptions(t *testing.T) {
 	opts.set("baz", "quux")
 	req := request{
 		profile: "something",
-		geoPath: geoPath,
+		coords:  geometry,
 		service: "foobar",
 		options: opts,
 	}

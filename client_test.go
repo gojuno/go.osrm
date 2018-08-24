@@ -27,7 +27,7 @@ func Test_doRequestWithBadHTTPCode(t *testing.T) {
 	c := newClient(ts.URL, &http.Client{})
 	req := request{
 		profile: "something",
-		geoPath: geoPath,
+		coords:  geometry,
 		service: "foobar",
 	}
 	err := c.doRequest(context.Background(), &req, nil)
@@ -43,7 +43,7 @@ func Test_doRequestWithBodyUnmarshalFailure(t *testing.T) {
 	c := newClient(ts.URL, &http.Client{})
 	req := request{
 		profile: "something",
-		geoPath: geoPath,
+		coords:  geometry,
 		service: "foobar",
 	}
 	err := c.doRequest(context.Background(), &req, nil)
