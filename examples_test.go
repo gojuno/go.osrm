@@ -1,10 +1,9 @@
-package examples
+package osrm_test
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	osrm "github.com/gojuno/go.osrm"
 	geo "github.com/paulmach/go.geo"
@@ -13,10 +12,7 @@ import (
 func ExampleOSRM_Route() {
 	client := osrm.NewFromURL("https://router.project-osrm.org")
 
-	ctx, cancelFn := context.WithTimeout(context.Background(), time.Second)
-	defer cancelFn()
-
-	resp, err := client.Route(ctx, osrm.RouteRequest{
+	resp, err := client.Route(context.Background(), osrm.RouteRequest{
 		Profile: "car",
 		GeoPath: *osrm.NewGeoPathFromPointSet(geo.PointSet{
 			{-73.87946, 40.75833},

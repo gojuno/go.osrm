@@ -31,7 +31,7 @@ type nearestResponseOrError struct {
 
 func (r NearestRequest) request() *request {
 	opts := options{}
-	if r.Number >= 1 {
+	if r.Number > 0 {
 		opts.addInt("number", r.Number)
 	}
 
