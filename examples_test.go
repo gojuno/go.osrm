@@ -14,7 +14,7 @@ func ExampleOSRM_Route() {
 
 	resp, err := client.Route(context.Background(), osrm.RouteRequest{
 		Profile: "car",
-		GeoPath: *osrm.NewGeoPathFromPointSet(geo.PointSet{
+		Coordinates: osrm.NewGeometryFromPointSet(geo.PointSet{
 			{-73.87946, 40.75833},
 			{-73.87925, 40.75837},
 			{-73.87918, 40.75837},

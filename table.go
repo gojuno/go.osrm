@@ -3,7 +3,7 @@ package osrm
 // TableRequest represents a request to the table method
 type TableRequest struct {
 	Profile               string
-	GeoPath               GeoPath
+	Coordinates           Geometry
 	Sources, Destinations []int
 }
 
@@ -28,7 +28,7 @@ func (r TableRequest) request() *request {
 
 	return &request{
 		profile: r.Profile,
-		geoPath: r.GeoPath,
+		coords:  r.Coordinates,
 		service: "table",
 		options: opts,
 	}

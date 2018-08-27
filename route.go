@@ -9,7 +9,7 @@ import (
 // RouteRequest represents a request to the route method
 type RouteRequest struct {
 	Profile          string
-	GeoPath          GeoPath
+	Coordinates      Geometry
 	Bearings         []Bearing
 	Steps            Steps
 	Annotations      Annotations
@@ -54,7 +54,7 @@ type RouteStep struct {
 	Distance float32      `json:"distance"`
 	Duration float32      `json:"duration"`
 	Name     string       `json:"name"`
-	Geometry GeoPath      `json:"geometry"`
+	Geometry Geometry     `json:"geometry"`
 	Mode     string       `json:"mode"`
 	Maneuver StepManeuver `json:"maneuver"`
 }
@@ -78,7 +78,7 @@ func (r RouteRequest) request() *request {
 
 	return &request{
 		profile: r.Profile,
-		geoPath: r.GeoPath,
+		coords:  r.Coordinates,
 		service: "route",
 		options: opts,
 	}

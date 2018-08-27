@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var geoPath = *NewGeoPathFromPointSet(
+var geometry = NewGeometryFromPointSet(
 	geo.PointSet([]geo.Point{
 		{-73.990185, 40.714701},
 		{-73.991801, 40.717571},
@@ -45,7 +45,7 @@ func TestErrorWithTimeout(t *testing.T) {
 	req := request{
 		service: "nothing",
 		profile: "nothing",
-		geoPath: geoPath,
+		coords:  geometry,
 	}
 
 	err := osrm.query(context.Background(), &req, nothing)
@@ -63,7 +63,7 @@ func TestErrorOnRouteRequest(t *testing.T) {
 
 	r, err := osrm.Route(context.Background(), RouteRequest{
 		Profile:          "car",
-		GeoPath:          geoPath,
+		Coordinates:      geometry,
 		Annotations:      AnnotationsFalse,
 		Steps:            StepsFalse,
 		Geometries:       GeometriesPolyline6,
@@ -88,7 +88,7 @@ func TestRouteRequest(t *testing.T) {
 
 	r, err := osrm.Route(context.Background(), RouteRequest{
 		Profile:          "car",
-		GeoPath:          geoPath,
+		Coordinates:      geometry,
 		Annotations:      AnnotationsTrue,
 		Geometries:       GeometriesPolyline6,
 		Overview:         OverviewFull,
@@ -122,7 +122,7 @@ func TestRouteRequest(t *testing.T) {
 	require.Equal("", step0.Name)
 	require.Equal(float32(5.0), step0.Duration)
 	require.Equal(float32(33.1), step0.Distance)
-	require.Equal(GeoPath{
+	require.Equal(Geometry{
 		Path: *geo.NewPathFromXYSlice([][]float64{
 			{-73.9902, 40.7147},
 			{-73.99023, 40.7146},
@@ -140,7 +140,7 @@ func TestTableRequest(t *testing.T) {
 
 	osrm := NewFromURL(ts.URL)
 
-	r, err := osrm.Table(context.Background(), TableRequest{Profile: "car", GeoPath: geoPath})
+	r, err := osrm.Table(context.Background(), TableRequest{Profile: "car", Coordinates: geometry})
 
 	require := require.New(t)
 
@@ -163,8 +163,8 @@ func TestMatchRequest(t *testing.T) {
 	osrm := NewFromURL(ts.URL)
 
 	r, err := osrm.Match(context.Background(), MatchRequest{
-		Profile: "car",
-		GeoPath: geoPath,
+		Profile:     "car",
+		Coordinates: geometry,
 	})
 
 	require := require.New(t)
