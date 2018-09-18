@@ -6,6 +6,7 @@ import geo "github.com/paulmach/go.geo"
 type MatchRequest struct {
 	Profile     string
 	Coordinates Geometry
+	Bearings    []Bearing
 	Steps       Steps
 	Annotations Annotations
 	Tidy        Tidy
@@ -49,6 +50,9 @@ func (r MatchRequest) request() *request {
 	}
 	if len(r.Hints) > 0 {
 		options.add("hints", r.Hints...)
+	}
+	if len(r.Bearings) > 0 {
+		options.set("bearings", bearings(r.Bearings))
 	}
 
 	return &request{

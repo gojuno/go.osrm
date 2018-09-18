@@ -42,6 +42,15 @@ func TestEmptyMatchRequestOptions(t *testing.T) {
 			expectedURI: "geometries=polyline6&hints=a;b;c;d",
 		},
 		{
+			name: "with bearings",
+			request: MatchRequest{
+				Bearings: []Bearing{
+					{0, 20}, {10, 20},
+				},
+			},
+			expectedURI: "bearings=0%2C20%3B10%2C20&geometries=polyline6",
+		},
+		{
 			name: "custom overview option",
 			request: MatchRequest{
 				Overview:    OverviewSimplified,
