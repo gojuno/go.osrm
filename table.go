@@ -9,12 +9,8 @@ type TableRequest struct {
 
 // TableResponse resresents a response from the table method
 type TableResponse struct {
+	ResponseStatus
 	Durations [][]float32 `json:"durations"`
-}
-
-type tableResponseOrError struct {
-	responseStatus
-	TableResponse
 }
 
 func (r TableRequest) request() *request {

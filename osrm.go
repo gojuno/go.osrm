@@ -30,6 +30,29 @@ type Config struct {
 	Client HTTPClient
 }
 
+// ResponseStatus represent OSRM API response
+type ResponseStatus struct {
+	Code        string `json:"code"`
+	Message     string `json:"message"`
+	DataVersion string `json:"data_version"`
+}
+
+// ErrCode returns error code from OSRM response
+func (r ResponseStatus) ErrCode() string {
+	return r.Code
+}
+
+func (r ResponseStatus) Error() string {
+	return r.Code + " - " + r.Message
+}
+
+func (r ResponseStatus) apiError() error {
+	if r.Code != errorCodeOK {
+		return r
+	}
+	return nil
+}
+
 type response interface {
 	apiError() error
 }
@@ -74,39 +97,39 @@ func (o OSRM) query(ctx context.Context, in *request, out response) error {
 // Route searches the shortest path between given coordinates.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#route-service for details.
 func (o OSRM) Route(ctx context.Context, r RouteRequest) (*RouteResponse, error) {
-	var resp routeResponseOrError
+	var resp RouteResponse
 	if err := o.query(ctx, r.request(), &resp); err != nil {
 		return nil, err
 	}
-	return &resp.RouteResponse, nil
+	return &resp, nil
 }
 
 // Table computes duration tables for the given locations.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#table-service for details.
 func (o OSRM) Table(ctx context.Context, r TableRequest) (*TableResponse, error) {
-	var resp tableResponseOrError
+	var resp TableResponse
 	if err := o.query(ctx, r.request(), &resp); err != nil {
 		return nil, err
 	}
-	return &resp.TableResponse, nil
+	return &resp, nil
 }
 
 // Match matches given GPS points to the road network in the most plausible way.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#match-service for details.
 func (o OSRM) Match(ctx context.Context, r MatchRequest) (*MatchResponse, error) {
-	var resp matchResponseOrError
+	var resp MatchResponse
 	if err := o.query(ctx, r.request(), &resp); err != nil {
 		return nil, err
 	}
-	return &resp.MatchResponse, nil
+	return &resp, nil
 }
 
 // Nearest matches given GPS point to the nearest road network.
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#nearest-service for details.
 func (o OSRM) Nearest(ctx context.Context, r NearestRequest) (*NearestResponse, error) {
-	var resp nearestResponseOrError
+	var resp NearestResponse
 	if err := o.query(ctx, r.request(), &resp); err != nil {
 		return nil, err
 	}
-	return &resp.NearestResponse, nil
+	return &resp, nil
 }

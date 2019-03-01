@@ -20,12 +20,8 @@ type RouteRequest struct {
 
 // RouteResponse represents a response from the route method
 type RouteResponse struct {
+	ResponseStatus
 	Routes []Route `json:"routes"`
-}
-
-type routeResponseOrError struct {
-	responseStatus
-	RouteResponse
 }
 
 // Route represents a route through (potentially multiple) points.
@@ -47,6 +43,7 @@ type RouteLeg struct {
 type Annotation struct {
 	Duration []float32 `json:"duration"`
 	Distance []float32 `json:"distance"`
+	Nodes    []int64   `json:"nodes"`
 }
 
 // RouteStep represents a route geometry
