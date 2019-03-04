@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/paulmach/go.geo"
+	geo "github.com/paulmach/go.geo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -72,7 +72,7 @@ func TestErrorOnRouteRequest(t *testing.T) {
 	})
 
 	require.NotNil(t, err)
-	assert.Equal(t, ErrorCodeNoRoute, err.(ResponseError).ErrCode())
+	assert.Equal(t, ErrorCodeNoRoute, err.(ResponseStatus).ErrCode())
 	assert.Equal(t, "NoRoute - no route to coordinates", err.Error())
 	assert.Nil(t, r)
 }
@@ -100,6 +100,8 @@ func TestRouteRequest(t *testing.T) {
 	require.Nil(err)
 	require.NotNil(r)
 
+	// response
+	require.Equal("2017-11-17T21:43:02Z", r.DataVersion)
 	// routes
 	require.Len(r.Routes, 1)
 	route := r.Routes[0]
@@ -172,6 +174,8 @@ func TestMatchRequest(t *testing.T) {
 	require.Nil(err)
 	require.NotNil(r)
 
+	// response
+	require.Equal("new", r.DataVersion)
 	// matchings
 	require.Len(r.Matchings, 1)
 	matching := r.Matchings[0]
@@ -180,4 +184,7 @@ func TestMatchRequest(t *testing.T) {
 	require.Equal(float32(79.0), matching.Duration)
 	// matchings/legs
 	require.Len(matching.Legs, 2)
+	require.Len(matching.Legs[0].Annotation.Nodes, 11)
+	require.Len(matching.Legs[1].Annotation.Nodes, 15)
+
 }

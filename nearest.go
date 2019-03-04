@@ -12,6 +12,7 @@ type NearestRequest struct {
 
 // NearestResponse represents a response from the nearest method
 type NearestResponse struct {
+	ResponseStatus
 	Waypoints []NearestWaypoint `json:"waypoints"`
 }
 
@@ -22,11 +23,6 @@ type NearestWaypoint struct {
 	Name     string    `json:"name"`
 	Hint     string    `json:"hint"`
 	Nodes    []uint64  `json:"nodes"`
-}
-
-type nearestResponseOrError struct {
-	responseStatus
-	NearestResponse
 }
 
 func (r NearestRequest) request() *request {

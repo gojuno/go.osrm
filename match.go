@@ -20,13 +20,9 @@ type MatchRequest struct {
 
 // MatchResponse represents a response from the match method
 type MatchResponse struct {
+	ResponseStatus
 	Matchings   []Matching    `json:"matchings"`
 	Tracepoints []*Tracepoint `json:"tracepoints"`
-}
-
-type matchResponseOrError struct {
-	responseStatus
-	MatchResponse
 }
 
 // Matching represents an array of Route objects that assemble the trace
