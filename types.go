@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/paulmach/go.geo"
+	geo "github.com/paulmach/go.geo"
 )
 
 const polyline6Factor = 1.0e6
@@ -61,8 +61,14 @@ type Annotations string
 
 // Supported annotations param values
 const (
-	AnnotationsTrue  Annotations = "true"
-	AnnotationsFalse Annotations = "false"
+	AnnotationsTrue        Annotations = "true"
+	AnnotationsFalse       Annotations = "false"
+	AnnotationsNodes       Annotations = "nodes"
+	AnnotationsDistance    Annotations = "distance"
+	AnnotationsDuration    Annotations = "duration"
+	AnnotationsDatasources Annotations = "datasources"
+	AnnotationsWeight      Annotations = "weight"
+	AnnotationsSpeed       Annotations = "speed"
 )
 
 // String returns Annotations as a string
