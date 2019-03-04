@@ -43,7 +43,7 @@ type RouteLeg struct {
 type Annotation struct {
 	Duration []float32 `json:"duration"`
 	Distance []float32 `json:"distance"`
-	Nodes    []int64   `json:"nodes"`
+	Nodes    []uint64  `json:"nodes"`
 }
 
 // RouteStep represents a route geometry
