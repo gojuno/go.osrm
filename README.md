@@ -4,6 +4,7 @@ Go client library for OSRM
 [![GoDoc](https://godoc.org/github.com/gojuno/go.osrm?status.svg)](http://godoc.org/github.com/gojuno/go.osrm)
 [![Build Status](https://travis-ci.org/gojuno/go.osrm.svg?branch=master)](https://travis-ci.org/gojuno/go.osrm)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gojuno/go.osrm)](https://goreportcard.com/report/github.com/gojuno/go.osrm)
+[![codecov](https://codecov.io/gh/gojuno/go.osrm/branch/master/graph/badge.svg)](https://codecov.io/gh/gojuno/go.osrm)
 
 ## Description
 
