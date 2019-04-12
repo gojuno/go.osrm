@@ -17,7 +17,7 @@ const (
 // See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md for details.
 // TODO: implement (trip, tile) methods
 type OSRM struct {
-	client client
+	client
 }
 
 // Config represents OSRM client configuration options

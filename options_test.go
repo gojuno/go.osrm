@@ -6,6 +6,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestOptionBlank(t *testing.T) {
+	var opts options
+	assert.Equal(t, "", opts.encode())
+}
+
 func TestOptionSetVal(t *testing.T) {
 	opts := options{}
 	opts.set("foo", "bar")

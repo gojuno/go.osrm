@@ -38,6 +38,12 @@ func fixturedHTTPHandler(name string, assertURL func(path, query string)) http.H
 	}
 }
 
+func TestDefaultOSRMConfig(t *testing.T) {
+	osrm := New()
+
+	assert.Equal(t, defaultServerURL, osrm.client.serverURL)
+}
+
 func TestErrorWithTimeout(t *testing.T) {
 	osrm := NewFromURLWithTimeout("http://25.0.0.1", 500*time.Microsecond)
 
