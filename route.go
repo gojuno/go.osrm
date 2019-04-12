@@ -81,11 +81,6 @@ func (r RouteRequest) request() *request {
 	}
 }
 
-// URL generates a url for OSRM route request
-func (r RouteRequest) URL(serverURL string) (string, error) {
-	return r.request().URL(serverURL)
-}
-
 func stepsOptions(steps Steps, annotations Annotations, overview Overview, geometries Geometries) options {
 	return options{}.
 		setStringer("steps", steps).

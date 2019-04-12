@@ -16,11 +16,12 @@ import (
 )
 
 var geometry = NewGeometryFromPointSet(
-	geo.PointSet([]geo.Point{
+	geo.PointSet{
 		{-73.990185, 40.714701},
 		{-73.991801, 40.717571},
 		{-73.985751, 40.715651},
-	}))
+	},
+)
 
 func fixturedJSON(name string) []byte {
 	data, err := ioutil.ReadFile("testdata/" + name + ".json")
@@ -33,7 +34,7 @@ func fixturedJSON(name string) []byte {
 func fixturedHTTPHandler(name string, assertURL func(path, query string)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		assertURL(r.URL.Path, r.URL.RawQuery)
-		fmt.Fprintln(w, string(fixturedJSON(name)))
+		_, _ = fmt.Fprintln(w, string(fixturedJSON(name)))
 	}
 }
 
@@ -49,7 +50,7 @@ func TestErrorWithTimeout(t *testing.T) {
 	}
 
 	err := osrm.query(context.Background(), &req, nothing)
-	require.NotNil(t, err)
+	require.Error(t, err)
 }
 
 func TestErrorOnRouteRequest(t *testing.T) {
@@ -71,9 +72,8 @@ func TestErrorOnRouteRequest(t *testing.T) {
 		ContinueStraight: ContinueStraightTrue,
 	})
 
-	require.NotNil(t, err)
+	require.EqualError(t, err, "NoRoute - no route to coordinates")
 	assert.Equal(t, ErrorCodeNoRoute, err.(ResponseStatus).ErrCode())
-	assert.Equal(t, "NoRoute - no route to coordinates", err.Error())
 	assert.Nil(t, r)
 }
 
@@ -97,7 +97,7 @@ func TestRouteRequest(t *testing.T) {
 
 	require := require.New(t)
 
-	require.Nil(err)
+	require.NoError(err)
 	require.NotNil(r)
 
 	// response
@@ -146,7 +146,7 @@ func TestTableRequest(t *testing.T) {
 
 	require := require.New(t)
 
-	require.Nil(err)
+	require.NoError(err)
 	require.NotNil(r)
 
 	require.Len(r.Durations, 3)
@@ -171,7 +171,7 @@ func TestMatchRequest(t *testing.T) {
 
 	require := require.New(t)
 
-	require.Nil(err)
+	require.NoError(err)
 	require.NotNil(r)
 
 	// response
@@ -186,5 +186,34 @@ func TestMatchRequest(t *testing.T) {
 	require.Len(matching.Legs, 2)
 	require.Len(matching.Legs[0].Annotation.Nodes, 11)
 	require.Len(matching.Legs[1].Annotation.Nodes, 15)
+}
 
+func TestNearestRequest(t *testing.T) {
+	ts := httptest.NewServer(fixturedHTTPHandler("nearest_response_full", func(path, query string) {
+		assert.Equal(t, "/nearest/v1/car/polyline(edswF|`sbM)", path)
+		assert.Equal(t, "number=5", query)
+	}))
+	defer ts.Close()
+
+	osrm := NewFromURL(ts.URL)
+
+	r, err := osrm.Nearest(context.Background(), NearestRequest{
+		Profile: "car",
+		Coordinates: NewGeometryFromPointSet(geo.PointSet{
+			{-73.994550, 40.735551},
+		}),
+		Number: 5,
+	})
+
+	require := require.New(t)
+
+	require.NoError(err)
+	require.NotNil(r)
+
+	assert.Len(t, r.Waypoints, 5)
+	assert.Equal(t, "XRAFgP___3-SAAAAXAEAAAAAAAAAAAAAfCMzQjwphUMAAAAAAAAAAJIAAABcAQAAAAAAAAAAAACVCQAAqu6W-xSTbQLK7pb7P5NtAgAAvxLg85BF", r.Waypoints[0].Hint)
+	assert.Equal(t, "-B4FgP___3_mAAAAZAAAAAAAAAAAAAAAcKqmQmexskAAAAAAAAAAAOYAAABkAAAAAAAAAAAAAACVCQAAmvCW-32SbQLK7pb7P5NtAgAADw3g85BF", r.Waypoints[1].Hint)
+	assert.Equal(t, "qRoFgP___38kAwAAyAAAAAAAAAAAAAAAjOUyQwAAAAAAAAAAAAAAACQDAADIAAAAAAAAAAAAAACVCQAAevCW-1GSbQLK7pb7P5NtAgAAvxLg85BF", r.Waypoints[2].Hint)
+	assert.Equal(t, "XhAFgP___38AAAAAWwAAAAAAAAAAAAAAAAAAANvEokIAAAAAAAAAAAAAAABbAAAAAAAAAAAAAACVCQAAevCW-1GSbQLK7pb7P5NtAgAADw3g85BF", r.Waypoints[3].Hint)
+	assert.Equal(t, "-h4FgJQVyYAyAAAA2AAAAAAAAAAAAAAAU4QzQm0XQUMAAAAAAAAAADIAAADYAAAAAAAAAAAAAACVCQAAp_CW-8-VbQLK7pb7P5NtAgAArxLg85BF", r.Waypoints[4].Hint)
 }

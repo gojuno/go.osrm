@@ -42,8 +42,3 @@ func (r NearestRequest) request() *request {
 		options: opts,
 	}
 }
-
-// URL generates a url for OSRM match request
-func (r NearestRequest) URL(serverURL string) (string, error) {
-	return r.request().URL(serverURL)
-}

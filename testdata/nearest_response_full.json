@@ -1,0 +1,70 @@
+{
+   "code":"Ok",
+   "waypoints":[
+      {
+         "nodes":[
+            0,
+            42429373
+         ],
+         "hint":"XRAFgP___3-SAAAAXAEAAAAAAAAAAAAAfCMzQjwphUMAAAAAAAAAAJIAAABcAQAAAAAAAAAAAACVCQAAqu6W-xSTbQLK7pb7P5NtAgAAvxLg85BF",
+         "distance":5.487254,
+         "location":[
+            -73.994582,
+            40.735508
+         ],
+         "name":"West 13th Street"
+      },
+      {
+         "nodes":[
+            0,
+            42440710
+         ],
+         "hint":"-B4FgP___3_mAAAAZAAAAAAAAAAAAAAAcKqmQmexskAAAAAAAAAAAOYAAABkAAAAAAAAAAAAAACVCQAAmvCW-32SbQLK7pb7P5NtAgAADw3g85BF",
+         "distance":44.731064,
+         "location":[
+            -73.994086,
+            40.735357
+         ],
+         "name":"5th Avenue"
+      },
+      {
+         "nodes":[
+            0,
+            42436935
+         ],
+         "hint":"qRoFgP___38kAwAAyAAAAAAAAAAAAAAAjOUyQwAAAAAAAAAAAAAAACQDAADIAAAAAAAAAAAAAACVCQAAevCW-1GSbQLK7pb7P5NtAgAAvxLg85BF",
+         "distance":45.062234,
+         "location":[
+            -73.994118,
+            40.735313
+         ],
+         "name":"East 13th Street"
+      },
+      {
+         "nodes":[
+            0,
+            42429373
+         ],
+         "hint":"XhAFgP___38AAAAAWwAAAAAAAAAAAAAAAAAAANvEokIAAAAAAAAAAAAAAABbAAAAAAAAAAAAAACVCQAAevCW-1GSbQLK7pb7P5NtAgAADw3g85BF",
+         "distance":45.062234,
+         "location":[
+            -73.994118,
+            40.735313
+         ],
+         "name":"5th Avenue"
+      },
+      {
+         "nodes":[
+            5416901182,
+            42440710
+         ],
+         "hint":"-h4FgJQVyYAyAAAA2AAAAAAAAAAAAAAAU4QzQm0XQUMAAAAAAAAAADIAAADYAAAAAAAAAAAAAACVCQAAp_CW-8-VbQLK7pb7P5NtAgAArxLg85BF",
+         "distance":83.250961,
+         "location":[
+            -73.994073,
+            40.736207
+         ],
+         "name":"West 14th Street"
+      }
+   ]
+}
