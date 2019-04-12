@@ -59,28 +59,55 @@ func TestErrorWithTimeout(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestErrorOnRouteRequest(t *testing.T) {
-	ts := httptest.NewServer(fixturedHTTPHandler("route_response_no_route_error", func(path, query string) {
-		assert.Equal(t, "/route/v1/car/polyline({aowFrerbM}PbI~Jyd@)", path)
-		assert.Equal(t, "annotations=false&continue_straight=true&geometries=polyline6&overview=false&steps=false", query)
-	}))
+func TestErrorOnRequest(t *testing.T) {
+	ts := httptest.NewServer(fixturedHTTPHandler("invalid_query_response", func(path, query string) {}))
 	defer ts.Close()
 
 	osrm := NewFromURL(ts.URL)
 
-	r, err := osrm.Route(context.Background(), RouteRequest{
-		Profile:          "car",
-		Coordinates:      geometry,
-		Annotations:      AnnotationsFalse,
-		Steps:            StepsFalse,
-		Geometries:       GeometriesPolyline6,
-		Overview:         OverviewFalse,
-		ContinueStraight: ContinueStraightTrue,
+	geom := NewGeometryFromPointSet(geo.PointSet{{0.1, 0.1}})
+
+	assert := func(t *testing.T, err error) {
+		t.Helper()
+		require.EqualError(t, err, "InvalidQuery - Query string malformed close to position 28")
+		assert.Equal(t, ErrorCodeInvalidQuery, err.(ResponseStatus).ErrCode())
+	}
+
+	t.Run("route", func(t *testing.T) {
+		_, err := osrm.Route(context.Background(), RouteRequest{
+			Profile:     "car",
+			Coordinates: geom,
+		})
+
+		assert(t, err)
 	})
 
-	require.EqualError(t, err, "NoRoute - no route to coordinates")
-	assert.Equal(t, ErrorCodeNoRoute, err.(ResponseStatus).ErrCode())
-	assert.Nil(t, r)
+	t.Run("match", func(t *testing.T) {
+		_, err := osrm.Match(context.Background(), MatchRequest{
+			Profile:     "car",
+			Coordinates: geom,
+		})
+
+		assert(t, err)
+	})
+
+	t.Run("table", func(t *testing.T) {
+		_, err := osrm.Table(context.Background(), TableRequest{
+			Profile:     "car",
+			Coordinates: geom,
+		})
+
+		assert(t, err)
+	})
+
+	t.Run("nearest", func(t *testing.T) {
+		_, err := osrm.Nearest(context.Background(), NearestRequest{
+			Profile:     "car",
+			Coordinates: geom,
+		})
+
+		assert(t, err)
+	})
 }
 
 func TestRouteRequest(t *testing.T) {
