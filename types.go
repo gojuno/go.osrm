@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	geo "github.com/paulmach/go.geo"
+	geojson "github.com/paulmach/go.geojson"
 )
 
 const polyline6Factor = 1.0e6
@@ -39,7 +40,12 @@ func (g *Geometry) UnmarshalJSON(b []byte) (err error) {
 		g.Path = *geo.NewPathFromEncoding(encoded, polyline6Factor)
 		return
 	}
-	return json.Unmarshal(b, &g.PointSet)
+	geom, err := geojson.UnmarshalGeometry(b)
+	if !geom.IsLineString() {
+		return fmt.Errorf("unexpected geometry type: %v", geom.Type)
+	}
+	g.Path = *geo.NewPathFromXYSlice(geom.LineString)
+	return nil
 }
 
 // Tidy represents a tidy param for osrm5 match request
