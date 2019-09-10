@@ -9,6 +9,18 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestUnmarshalGeometryFromGeojson(t *testing.T) {
+	gp := Geometry{}
+	jdata := []byte("{\"type\": \"LineString\", \"coordinates\": [[-73.982253,40.742926],[-73.985253,40.742926]]}")
+
+	err := json.Unmarshal(jdata, &gp)
+
+	require.Nil(t, err)
+	require.Len(t, gp.PointSet, 2)
+	require.Equal(t, *geo.NewPointFromLatLng(40.742926, -73.982253), gp.PointSet[0])
+	require.Equal(t, *geo.NewPointFromLatLng(40.742926, -73.985253), gp.PointSet[1])
+}
+
 func TestUnmarshalGeometryFromPolyline(t *testing.T) {
 	gp := Geometry{}
 	jdata := []byte("\"w{_tlA`a_clCkrDldB~vBcyJ\"")
