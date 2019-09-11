@@ -9,9 +9,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUnmarshalGeometryFromPointsArray(t *testing.T) {
+func TestUnmarshalGeometryFromGeojson(t *testing.T) {
 	gp := Geometry{}
-	jdata := []byte("[[-73.982253,40.742926],[-73.985253,40.742926]]")
+	jdata := []byte("{\"type\": \"LineString\", \"coordinates\": [[-73.982253,40.742926],[-73.985253,40.742926]]}")
 
 	err := json.Unmarshal(jdata, &gp)
 
