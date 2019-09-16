@@ -9,8 +9,10 @@ import (
 func TestNearestRequestOverviewOption(t *testing.T) {
 	req := NearestRequest{
 		Number: 2,
-		Bearings: []Bearing{
-			{60, 380},
+		GeneralOptions: GeneralOptions{
+			Bearings: []Bearing{
+				{60, 380},
+			},
 		},
 	}
 	assert.Equal(
@@ -19,8 +21,10 @@ func TestNearestRequestOverviewOption(t *testing.T) {
 		req.request().options.encode())
 
 	req = NearestRequest{
-		Bearings: []Bearing{
-			{60, 380},
+		GeneralOptions: GeneralOptions{
+			Bearings: []Bearing{
+				{60, 380},
+			},
 		},
 	}
 	assert.Equal(

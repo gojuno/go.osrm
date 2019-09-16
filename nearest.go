@@ -4,9 +4,9 @@ import geo "github.com/paulmach/go.geo"
 
 // NearestRequest represents a request to the nearest method
 type NearestRequest struct {
+	GeneralOptions
 	Profile     string
 	Coordinates Geometry
-	Bearings    []Bearing
 	Number      int
 }
 
@@ -18,11 +18,8 @@ type NearestResponse struct {
 
 // NearestWaypoint represents a nearest point on a nearest query
 type NearestWaypoint struct {
-	Location geo.Point `json:"location"`
-	Distance float64   `json:"distance"`
-	Name     string    `json:"name"`
-	Hint     string    `json:"hint"`
-	Nodes    []uint64  `json:"nodes"`
+	Waypoint
+	Nodes []uint64 `json:"nodes"`
 }
 
 func (r NearestRequest) request() *request {
@@ -31,9 +28,7 @@ func (r NearestRequest) request() *request {
 		opts.addInt("number", r.Number)
 	}
 
-	if len(r.Bearings) > 0 {
-		opts.set("bearings", bearings(r.Bearings))
-	}
+	opts = r.GeneralOptions.options(opts)
 
 	return &request{
 		profile: r.Profile,
@@ -41,4 +36,11 @@ func (r NearestRequest) request() *request {
 		coords:  r.Coordinates,
 		options: opts,
 	}
+}
+
+type Waypoint struct {
+	Location geo.Point `json:"location"`
+	Distance float64   `json:"distance"`
+	Name     string    `json:"name"`
+	Hint     string    `json:"hint"`
 }

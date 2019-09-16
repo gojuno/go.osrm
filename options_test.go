@@ -101,3 +101,54 @@ func TestOptionsAddFloatValsAsVariadic(t *testing.T) {
 	opts.addFloat("foo", 1.1231312, 2.1233)
 	assert.Equal(t, "foo=1.1231312;2.1233", opts.encode())
 }
+
+func TestGeneralOptions(t *testing.T) {
+	cases := []struct {
+		name        string
+		options     GeneralOptions
+		expectedURI string
+	}{
+		{
+			name:        "empty",
+			options:     GeneralOptions{},
+			expectedURI: "",
+		},
+		{
+			name: "with bearings",
+			options: GeneralOptions{
+				Bearings: []Bearing{
+					{0, 20}, {10, 20},
+				},
+			},
+			expectedURI: "bearings=0%2C20%3B10%2C20",
+		},
+		{
+			name: "with radiuses",
+			options: GeneralOptions{
+				Radiuses: []float64{0.123123, 0.12312},
+			},
+			expectedURI: "radiuses=0.123123;0.12312",
+		},
+		{
+			name: "generate hints disabled",
+			options: GeneralOptions{
+				Radiuses:              []float64{0.123123, 0.12312},
+				GenerateHintsDisabled: true,
+			},
+			expectedURI: "generate_hints=false&radiuses=0.123123;0.12312",
+		},
+		{
+			name: "with approaches and exclude",
+			options: GeneralOptions{
+				Exclude:    []string{"toll", "highway"},
+				Approaches: []string{"a", "b"},
+			},
+			expectedURI: "approaches=a;b&exclude=toll;highway",
+		},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			assert.Equal(t, c.expectedURI, c.options.options(options{}).encode())
+		})
+	}
+}

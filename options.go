@@ -7,6 +7,38 @@ import (
 	"strconv"
 )
 
+type GeneralOptions struct {
+	Bearings              []Bearing
+	Radiuses              []float64
+	GenerateHintsDisabled bool
+	Hints                 []string
+	Approaches            []string
+	Exclude               []string
+}
+
+func (g GeneralOptions) options(opts options) options {
+	if len(g.Bearings) > 0 {
+		opts.add("bearings", bearings(g.Bearings))
+	}
+	if len(g.Radiuses) > 0 {
+		opts.addFloat("radiuses", g.Radiuses...)
+	}
+	// generate_hints option default is true
+	if g.GenerateHintsDisabled {
+		opts.setBool("generate_hints", !g.GenerateHintsDisabled)
+	}
+	if len(g.Hints) > 0 {
+		opts.add("hints", g.Hints...)
+	}
+	if len(g.Approaches) > 0 {
+		opts.add("approaches", g.Approaches...)
+	}
+	if len(g.Exclude) > 0 {
+		opts.add("exclude", g.Exclude...)
+	}
+	return opts
+}
+
 // options represents OSRM query params to be encoded in URL
 type options map[string][]string
 
