@@ -26,9 +26,12 @@ type RouteResponse struct {
 
 // Route represents a route through (potentially multiple) points.
 type Route struct {
-	Distance float32    `json:"distance"`
-	Duration float32    `json:"duration"`
-	Legs     []RouteLeg `json:"legs"`
+	Distance   float32    `json:"distance"`
+	Duration   float32    `json:"duration"`
+	WeightName string     `json:"weight_name"`
+	Wieght     float32    `json:"weight"`
+	Geometry   Geometry   `json:"geometry"`
+	Legs       []RouteLeg `json:"legs"`
 }
 
 // RouteLeg represents a route between two waypoints.
@@ -36,6 +39,8 @@ type RouteLeg struct {
 	Annotation Annotation  `json:"annotation"`
 	Distance   float32     `json:"distance"`
 	Duration   float32     `json:"duration"`
+	Summary    string      `json:"summary"`
+	Weight     float32     `json:"weight"`
 	Steps      []RouteStep `json:"steps"`
 }
 
@@ -48,12 +53,14 @@ type Annotation struct {
 
 // RouteStep represents a route geometry
 type RouteStep struct {
-	Distance float32      `json:"distance"`
-	Duration float32      `json:"duration"`
-	Name     string       `json:"name"`
-	Geometry Geometry     `json:"geometry"`
-	Mode     string       `json:"mode"`
-	Maneuver StepManeuver `json:"maneuver"`
+	Distance    float32      `json:"distance"`
+	Duration    float32      `json:"duration"`
+	Name        string       `json:"name"`
+	Geometry    Geometry     `json:"geometry"`
+	Mode        string       `json:"mode"`
+	DrivingSide string       `json:"driving_side"`
+	Weight      float32      `json:"weight"`
+	Maneuver    StepManeuver `json:"maneuver"`
 }
 
 // StepManeuver contains information about maneuver in step
