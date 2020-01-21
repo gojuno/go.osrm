@@ -8,9 +8,9 @@ import (
 
 // RouteRequest represents a request to the route method
 type RouteRequest struct {
+	GeneralOptions
 	Profile          string
 	Coordinates      Geometry
-	Bearings         []Bearing
 	Steps            Steps
 	Annotations      Annotations
 	Overview         Overview
@@ -21,7 +21,8 @@ type RouteRequest struct {
 // RouteResponse represents a response from the route method
 type RouteResponse struct {
 	ResponseStatus
-	Routes []Route `json:"routes"`
+	Routes    []Route    `json:"routes"`
+	Waypoints []Waypoint `json:"waypoints"`
 }
 
 // Route represents a route through (potentially multiple) points.
@@ -76,9 +77,7 @@ func (r RouteRequest) request() *request {
 	opts := stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries).
 		setStringer("continue_straight", r.ContinueStraight)
 
-	if len(r.Bearings) > 0 {
-		opts.set("bearings", bearings(r.Bearings))
-	}
+	opts = r.GeneralOptions.options(opts)
 
 	return &request{
 		profile: r.Profile,

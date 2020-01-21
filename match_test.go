@@ -20,15 +20,19 @@ func TestEmptyMatchRequestOptions(t *testing.T) {
 			name: "with timestamps and radiuses",
 			request: MatchRequest{
 				Timestamps: []int64{0, 1, 2},
-				Radiuses:   []float64{0.123123, 0.12312},
+				GeneralOptions: GeneralOptions{
+					Radiuses: []float64{0.123123, 0.12312},
+				},
 			},
 			expectedURI: "geometries=polyline6&radiuses=0.123123;0.12312&timestamps=0;1;2",
 		},
 		{
 			name: "with gaps and tidy",
 			request: MatchRequest{
+				GeneralOptions: GeneralOptions{
+					Radiuses: []float64{0.123123, 0.12312},
+				},
 				Timestamps: []int64{0, 1, 2},
-				Radiuses:   []float64{0.123123, 0.12312},
 				Gaps:       GapsSplit,
 				Tidy:       TidyTrue,
 			},
@@ -37,15 +41,19 @@ func TestEmptyMatchRequestOptions(t *testing.T) {
 		{
 			name: "with hints",
 			request: MatchRequest{
-				Hints: []string{"a", "b", "c", "d"},
+				GeneralOptions: GeneralOptions{
+					Hints: []string{"a", "b", "c", "d"},
+				},
 			},
 			expectedURI: "geometries=polyline6&hints=a;b;c;d",
 		},
 		{
 			name: "with bearings",
 			request: MatchRequest{
-				Bearings: []Bearing{
-					{0, 20}, {10, 20},
+				GeneralOptions: GeneralOptions{
+					Bearings: []Bearing{
+						{0, 20}, {10, 20},
+					},
 				},
 			},
 			expectedURI: "bearings=0%2C20%3B10%2C20&geometries=polyline6",

@@ -4,15 +4,13 @@ import geo "github.com/paulmach/go.geo"
 
 // MatchRequest represents a request to the match method
 type MatchRequest struct {
+	GeneralOptions
 	Profile     string
 	Coordinates Geometry
-	Bearings    []Bearing
 	Steps       Steps
 	Annotations Annotations
 	Tidy        Tidy
 	Timestamps  []int64
-	Radiuses    []float64
-	Hints       []string
 	Overview    Overview
 	Gaps        Gaps
 	Geometries  Geometries
@@ -41,15 +39,7 @@ func (r MatchRequest) request() *request {
 	if len(r.Timestamps) > 0 {
 		options.addInt64("timestamps", r.Timestamps...)
 	}
-	if len(r.Radiuses) > 0 {
-		options.addFloat("radiuses", r.Radiuses...)
-	}
-	if len(r.Hints) > 0 {
-		options.add("hints", r.Hints...)
-	}
-	if len(r.Bearings) > 0 {
-		options.set("bearings", bearings(r.Bearings))
-	}
+	options = r.GeneralOptions.options(options)
 
 	return &request{
 		profile: r.Profile,

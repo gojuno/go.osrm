@@ -16,9 +16,11 @@ func TestEmptyRouteRequestOptions(t *testing.T) {
 
 func TestRouteRequestOptionsWithBearings(t *testing.T) {
 	req := RouteRequest{
-		Bearings: []Bearing{
-			{60, 380},
-			{45, 180},
+		GeneralOptions: GeneralOptions{
+			Bearings: []Bearing{
+				{60, 380},
+				{45, 180},
+			},
 		},
 		ContinueStraight: ContinueStraightTrue,
 	}

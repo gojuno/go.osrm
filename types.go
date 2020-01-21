@@ -87,14 +87,15 @@ type Annotations string
 
 // Supported annotations param values
 const (
-	AnnotationsTrue        Annotations = "true"
-	AnnotationsFalse       Annotations = "false"
-	AnnotationsNodes       Annotations = "nodes"
-	AnnotationsDistance    Annotations = "distance"
-	AnnotationsDuration    Annotations = "duration"
-	AnnotationsDatasources Annotations = "datasources"
-	AnnotationsWeight      Annotations = "weight"
-	AnnotationsSpeed       Annotations = "speed"
+	AnnotationsTrue             Annotations = "true"
+	AnnotationsFalse            Annotations = "false"
+	AnnotationsNodes            Annotations = "nodes"
+	AnnotationsDistance         Annotations = "distance"
+	AnnotationsDuration         Annotations = "duration"
+	AnnotationsDatasources      Annotations = "datasources"
+	AnnotationsWeight           Annotations = "weight"
+	AnnotationsSpeed            Annotations = "speed"
+	AnnotationsDurationDistance Annotations = "duration,distance"
 )
 
 // String returns Annotations as a string
@@ -222,4 +223,19 @@ func bearings(br []Bearing) string {
 		s[i] = b.String()
 	}
 	return strings.Join(s, ";")
+}
+
+type FallbackCoordinate string
+
+const (
+	FallbackCoordinateInput   FallbackCoordinate = "input"
+	FallbackCoordinateSnapped FallbackCoordinate = "snapped"
+)
+
+func (f FallbackCoordinate) String() string {
+	return string(f)
+}
+
+func (f FallbackCoordinate) Valid() bool {
+	return f == FallbackCoordinateInput || f == FallbackCoordinateSnapped
 }
