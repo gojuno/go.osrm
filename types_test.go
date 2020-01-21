@@ -10,37 +10,62 @@ import (
 )
 
 func TestUnmarshalGeometryFromGeojson(t *testing.T) {
-	gp := Geometry{}
-	jdata := []byte("{\"type\": \"LineString\", \"coordinates\": [[-73.982253,40.742926],[-73.985253,40.742926]]}")
+	var g Geometry
+	in := []byte(`{"type": "LineString", "coordinates": [[-73.982253,40.742926],[-73.985253,40.742926]]}`)
 
-	err := json.Unmarshal(jdata, &gp)
+	err := json.Unmarshal(in, &g)
 
 	require.Nil(t, err)
-	require.Len(t, gp.PointSet, 2)
-	require.Equal(t, *geo.NewPointFromLatLng(40.742926, -73.982253), gp.PointSet[0])
-	require.Equal(t, *geo.NewPointFromLatLng(40.742926, -73.985253), gp.PointSet[1])
+	require.Len(t, g.PointSet, 2)
+	require.Equal(t, *geo.NewPoint(-73.982253, 40.742926), g.PointSet[0])
+	require.Equal(t, *geo.NewPoint(-73.985253, 40.742926), g.PointSet[1])
 }
 
 func TestUnmarshalGeometryFromPolyline(t *testing.T) {
-	gp := Geometry{}
-	jdata := []byte("\"w{_tlA`a_clCkrDldB~vBcyJ\"")
+	var g Geometry
+	in := []byte(`"nvnalCui}okAkgpk@u}hQf}_l@mbpL"`)
 
-	err := json.Unmarshal(jdata, &gp)
+	err := json.Unmarshal(in, &g)
 
 	require.Nil(t, err)
-	require.Len(t, gp.PointSet, 3)
-	require.Equal(t, *geo.NewPointFromLatLng(40.71470, -73.990177), gp.PointSet[0])
-	require.Equal(t, *geo.NewPointFromLatLng(40.71757, -73.99180), gp.PointSet[1])
-	require.Equal(t, *geo.NewPointFromLatLng(40.71565, -73.98575), gp.PointSet[2])
+	require.Len(t, g.PointSet, 3)
+	require.Equal(t, *geo.NewPoint(40.123563, -73.965432), g.PointSet[0])
+	require.Equal(t, *geo.NewPoint(40.423574, -73.235698), g.PointSet[1])
+	require.Equal(t, *geo.NewPoint(40.645325, -73.973462), g.PointSet[2])
+}
+
+func TestUnmarshalGeometryFromNull(t *testing.T) {
+	var g Geometry
+	in := []byte(`null`)
+	err := json.Unmarshal(in, &g)
+
+	require.Nil(t, err)
+	require.Equal(t, 0, len(g.Path.PointSet))
+}
+
+func TestUnmarshalGeometryFromEmptyJSON(t *testing.T) {
+	var g Geometry
+	in := []byte(`{}`)
+	err := json.Unmarshal(in, &g)
+
+	require.Error(t, err)
 }
 
 func TestPolylineGeometry(t *testing.T) {
-	path := geo.NewPath()
-	path.Push(geo.NewPointFromLatLng(40.714701, -73.990177))
-	path.Push(geo.NewPointFromLatLng(40.717572, -73.991801))
-	path.Push(geo.NewPointFromLatLng(40.715653, -73.985752))
-	gp := Geometry{*path}
-	assert.Equal(t, "{aowFrerbM}PbI~Jyd@", gp.Polyline())
+	g := Geometry{
+		Path: geo.Path{
+			PointSet: []geo.Point{
+				{40.123563, -73.965432},
+				{40.423574, -73.235698},
+				{40.645325, -73.973462},
+			},
+		},
+	}
+
+	bytes, err := json.Marshal(g)
+	require.NoError(t, err)
+
+	assert.Equal(t, `"nvnalCui}okAkgpk@u}hQf}_l@mbpL"`, string(bytes))
 }
 
 func TestRequestURLWithEmptyOptions(t *testing.T) {

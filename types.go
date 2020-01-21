@@ -10,7 +10,10 @@ import (
 	geojson "github.com/paulmach/go.geojson"
 )
 
-const polyline6Factor = 1.0e6
+const (
+	polyline5Factor = 1.0e5
+	polyline6Factor = 1.0e6
+)
 
 // Geometry represents a points set
 type Geometry struct {
@@ -28,24 +31,37 @@ func NewGeometryFromPointSet(ps geo.PointSet) Geometry {
 }
 
 // Polyline generates a polyline in Google format
-// It uses default factor because of OSRM5 doesn't support polyline6 as coordinates
-func (g *Geometry) Polyline() string {
-	return g.Encode()
+func (g *Geometry) Polyline(factor int) string {
+	return g.Encode(factor)
 }
 
 // UnmarshalJSON parses a geo path from points set or a polyline
-func (g *Geometry) UnmarshalJSON(b []byte) (err error) {
-	var encoded string
-	if err = json.Unmarshal(b, &encoded); err == nil {
-		g.Path = *geo.NewPathFromEncoding(encoded, polyline6Factor)
-		return
+func (g *Geometry) UnmarshalJSON(b []byte) error {
+	if len(b) == 0 {
+		return nil
 	}
+
+	var encoded string
+	if err := json.Unmarshal(b, &encoded); err == nil {
+		g.Path = *geo.NewPathFromEncoding(encoded, polyline6Factor)
+		return nil
+	}
+
 	geom, err := geojson.UnmarshalGeometry(b)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal geojson geometry, err: %v", err)
+	}
 	if !geom.IsLineString() {
 		return fmt.Errorf("unexpected geometry type: %v", geom.Type)
 	}
 	g.Path = *geo.NewPathFromXYSlice(geom.LineString)
+
 	return nil
+}
+
+// MarshalJSON generates a polyline in Google polyline6 format
+func (g Geometry) MarshalJSON() ([]byte, error) {
+	return []byte(`"` + g.Polyline(polyline6Factor) + `"`), nil
 }
 
 // Tidy represents a tidy param for osrm5 match request
@@ -179,7 +195,7 @@ func (r *request) URL(serverURL string) (string, error) {
 		r.service, // service
 		version,   // version
 		r.profile, // profile
-		"polyline(" + url.PathEscape(r.coords.Polyline()) + ")", // coordinates
+		"polyline(" + url.PathEscape(r.coords.Polyline(polyline5Factor)) + ")", // coordinates
 	}, "/")
 	if len(r.options) > 0 {
 		url += "?" + r.options.encode() // options
