@@ -31,8 +31,12 @@ func NewGeometryFromPointSet(ps geo.PointSet) Geometry {
 }
 
 // Polyline generates a polyline in Google format
-func (g *Geometry) Polyline(factor int) string {
-	return g.Encode(factor)
+func (g *Geometry) Polyline(factor ...int) string {
+	if len(factor) == 0 {
+		return g.Encode(polyline5Factor)
+	}
+
+	return g.Encode(factor[0])
 }
 
 // UnmarshalJSON parses a geo path from points set or a polyline
