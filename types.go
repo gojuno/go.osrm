@@ -65,7 +65,7 @@ func (g *Geometry) UnmarshalJSON(b []byte) error {
 
 // MarshalJSON generates a polyline in Google polyline6 format
 func (g Geometry) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + g.Polyline(polyline6Factor) + `"`), nil
+	return json.Marshal(g.Polyline(polyline6Factor))
 }
 
 // Tidy represents a tidy param for osrm5 match request
