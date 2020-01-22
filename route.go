@@ -46,30 +46,46 @@ type RouteLeg struct {
 
 // Annotation contains additional metadata for each coordinate along the route geometry
 type Annotation struct {
-	Duration []float32 `json:"duration"`
-	Distance []float32 `json:"distance"`
-	Nodes    []uint64  `json:"nodes"`
+	Duration []float32 `json:"duration,omitempty"`
+	Distance []float32 `json:"distance,omitempty"`
+	Nodes    []uint64  `json:"nodes,omitempty"`
 }
 
 // RouteStep represents a route geometry
 type RouteStep struct {
-	Distance    float32      `json:"distance"`
-	Duration    float32      `json:"duration"`
-	Name        string       `json:"name"`
-	Geometry    Geometry     `json:"geometry"`
-	Mode        string       `json:"mode"`
-	DrivingSide string       `json:"driving_side"`
-	Weight      float32      `json:"weight"`
-	Maneuver    StepManeuver `json:"maneuver"`
+	Distance      float32        `json:"distance"`
+	Duration      float32        `json:"duration"`
+	Geometry      Geometry       `json:"geometry"`
+	Name          string         `json:"name"`
+	Mode          string         `json:"mode"`
+	DrivingSide   string         `json:"driving_side"`
+	Weight        float32        `json:"weight"`
+	Maneuver      StepManeuver   `json:"maneuver"`
+	Intersections []Intersection `json:"intersections,omitempty"`
+}
+
+type Intersection struct {
+	Location geo.Point `json:"location"`
+	Bearings []uint16  `json:"bearings"`
+	Entry    []bool    `json:"entry"`
+	In       *uint32   `json:"in,omitempty"`
+	Out      *uint32   `json:"out,omitempty"`
+	Lanes    []Lane    `json:"lanes,omitempty"`
+}
+
+type Lane struct {
+	Indications []string `json:"indications"`
+	Valid       bool     `json:"valid"`
 }
 
 // StepManeuver contains information about maneuver in step
 type StepManeuver struct {
+	Location      geo.Point `json:"location"`
 	BearingBefore float32   `json:"bearing_before"`
 	BearingAfter  float32   `json:"bearing_after"`
-	Location      geo.Point `json:"location"`
 	Type          string    `json:"type"`
-	Modifier      string    `json:"modifier"`
+	Modifier      string    `json:"modifier,omitempty"`
+	Exit          *uint32   `json:"exit,omitempty"`
 }
 
 func (r RouteRequest) request() *request {
