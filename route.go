@@ -2,6 +2,7 @@ package osrm
 
 import (
 	"fmt"
+	"strconv"
 
 	geo "github.com/paulmach/go.geo"
 )
@@ -16,12 +17,21 @@ type RouteRequest struct {
 	Overview         Overview
 	Geometries       Geometries
 	ContinueStraight ContinueStraight
+	Waypoints        []int
 }
 
 // RouteResponse represents a response from the route method
 type RouteResponse struct {
 	ResponseStatus
-	Routes []Route `json:"routes"`
+	Routes    []Route    `json:"routes"`
+	Waypoints []Waypoint `json:"waypoints"`
+}
+
+type Waypoint struct {
+	Name     string    `json:"name"`
+	Location geo.Point `json:"location"`
+	Distance float32   `json:"distance"`
+	Hint     string    `json:"hint"`
 }
 
 // Route represents a route through (potentially multiple) points.
@@ -91,6 +101,17 @@ type StepManeuver struct {
 func (r RouteRequest) request() *request {
 	opts := stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries).
 		setStringer("continue_straight", r.ContinueStraight)
+
+	if len(r.Waypoints) > 0 {
+		waypoints := ""
+		for i, w := range r.Waypoints {
+			if i > 0 {
+				waypoints += ";"
+			}
+			waypoints += strconv.Itoa(w)
+		}
+		opts.set("waypoints", waypoints)
+	}
 
 	if len(r.Bearings) > 0 {
 		opts.set("bearings", bearings(r.Bearings))
