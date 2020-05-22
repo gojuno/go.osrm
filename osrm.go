@@ -28,6 +28,8 @@ type Config struct {
 	// Client is custom pre-configured http client to be used for queries.
 	// New http.Client instance with default settings and one second timeout will be used if not set.
 	Client HTTPClient
+	// Use POST method to request OSRM API
+	UsePOST bool
 }
 
 // ResponseStatus represent OSRM API response
@@ -84,7 +86,7 @@ func NewWithConfig(cfg Config) *OSRM {
 		cfg.Client = &http.Client{Timeout: defaultTimeout}
 	}
 
-	return &OSRM{client: newClient(cfg.ServerURL, cfg.Client)}
+	return &OSRM{client: newClient(cfg.Client, cfg.ServerURL, cfg.UsePOST)}
 }
 
 func (o OSRM) query(ctx context.Context, in *request, out response) error {

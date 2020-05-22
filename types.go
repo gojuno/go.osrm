@@ -182,8 +182,8 @@ type request struct {
 	options options
 }
 
-// URL generates a url for OSRM request
-func (r *request) URL(serverURL string) (string, error) {
+// URLPath generates a url path for OSRM request
+func (r *request) URLPath() (string, error) {
 	if r.service == "" {
 		return "", ErrEmptyServiceName
 	}
@@ -193,18 +193,17 @@ func (r *request) URL(serverURL string) (string, error) {
 	if r.coords.Length() == 0 {
 		return "", ErrNoCoordinates
 	}
-	// http://{server}/{service}/{version}/{profile}/{coordinates}[.{format}]?option=value&option=value
-	url := strings.Join([]string{
-		serverURL, // server
+	// {service}/{version}/{profile}/{coordinates}[.{format}]?option=value&option=value
+	u := strings.Join([]string{
 		r.service, // service
 		version,   // version
 		r.profile, // profile
 		"polyline(" + url.PathEscape(r.coords.Polyline(polyline5Factor)) + ")", // coordinates
 	}, "/")
 	if len(r.options) > 0 {
-		url += "?" + r.options.encode() // options
+		u += "?" + r.options.encode() // options
 	}
-	return url, nil
+	return u, nil
 }
 
 // Bearing limits the search to segments with given bearing in degrees towards true north in clockwise direction.
