@@ -258,7 +258,7 @@ func TestTripRequest(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	osrm := NewFromURL("http://router.project-osrm.org")
+	osrm := NewFromURL(ts.URL)
 	tgeo := NewGeometryFromPointSet(geo.PointSet{
 
 		{13.3927165, 52.4956761},
