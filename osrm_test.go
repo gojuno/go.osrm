@@ -250,3 +250,38 @@ func TestNearestRequest(t *testing.T) {
 	assert.Equal(t, "XhAFgP___38AAAAAWwAAAAAAAAAAAAAAAAAAANvEokIAAAAAAAAAAAAAAABbAAAAAAAAAAAAAACVCQAAevCW-1GSbQLK7pb7P5NtAgAADw3g85BF", r.Waypoints[3].Hint)
 	assert.Equal(t, "-h4FgJQVyYAyAAAA2AAAAAAAAAAAAAAAU4QzQm0XQUMAAAAAAAAAADIAAADYAAAAAAAAAAAAAACVCQAAp_CW-8-VbQLK7pb7P5NtAgAArxLg85BF", r.Waypoints[4].Hint)
 }
+
+func TestTripRequest(t *testing.T) {
+	ts := httptest.NewServer(fixturedHTTPHandler("trip_response_full", func(path, query string) {
+		assert.Equal(t, `/trip/v1/car/polyline(_al_IowvpA@f@As@PAG\)`, path)
+		assert.Equal(t, "destination=last&geometries=polyline6&roundtrip=true&source=any", query)
+	}))
+	defer ts.Close()
+
+	osrm := NewFromURL("http://router.project-osrm.org")
+	tgeo := NewGeometryFromPointSet(geo.PointSet{
+
+		{13.3927165, 52.4956761},
+		{13.3925165, 52.4956721},
+		{13.3927765, 52.4956821},
+		{13.3927925, 52.4955861},
+		{13.3926365, 52.4956261},
+	})
+	r, err := osrm.Trip(context.Background(), TripRequest{
+		Profile:     "car",
+		Coordinates: tgeo,
+		Roundtrip:   RoundtripTrue,
+		Destination: DestinationLast,
+	})
+
+	require := require.New(t)
+
+	require.NoError(err)
+	require.NotNil(r)
+	assert.Len(t, r.Waypoints, 5)
+	assert.Equal(t, 13.392608, r.Waypoints[0].Location[0])
+	assert.Equal(t, 13.392412, r.Waypoints[1].Location[0])
+	assert.Equal(t, 13.392666, r.Waypoints[2].Location[0])
+	assert.Equal(t, 13.39265, r.Waypoints[3].Location[0])
+	assert.Equal(t, 13.392516, r.Waypoints[4].Location[0])
+}

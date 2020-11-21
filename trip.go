@@ -30,9 +30,9 @@ func (r TripRequest) request() *request {
 		coords:  r.Coordinates,
 		service: "trip",
 		options: stepsOptions(r.Steps, r.Annotations, r.Overview, r.Geometries).
-			setStringer("roundtrip", r.Roundtrip).
-			setStringer("source", r.Source).
-			setStringer("destination", r.Destination),
+			setStringer("roundtrip", valueOrDefault(r.Roundtrip, RoundtripDefault)).
+			setStringer("source", valueOrDefault(r.Source, SourceDefault)).
+			setStringer("destination", valueOrDefault(r.Destination, DestinationDefault)),
 	}
 }
 

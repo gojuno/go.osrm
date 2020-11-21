@@ -10,7 +10,7 @@ func TestEmptyTripRequestOptions(t *testing.T) {
 	req := TripRequest{}
 	assert.Equal(
 		t,
-		"geometries=polyline6",
+		"destination=any&geometries=polyline6&roundtrip=true&source=any",
 		req.request().options.encode())
 }
 
@@ -20,7 +20,7 @@ func TestTripRequestOptionsWithRoundtrip(t *testing.T) {
 	}
 	assert.Equal(
 		t,
-		"geometries=polyline6&roundtrip=false",
+		"destination=any&geometries=polyline6&roundtrip=false&source=any",
 		req.request().options.encode())
 }
 
@@ -30,7 +30,7 @@ func TestTripRequestOptionsWithSource(t *testing.T) {
 	}
 	assert.Equal(
 		t,
-		"geometries=polyline6&source=first",
+		"destination=any&geometries=polyline6&roundtrip=true&source=first",
 		req.request().options.encode())
 }
 
@@ -40,7 +40,7 @@ func TestTripRequestOptionsWithDestination(t *testing.T) {
 	}
 	assert.Equal(
 		t,
-		"destination=last&geometries=polyline6",
+		"destination=last&geometries=polyline6&roundtrip=true&source=any",
 		req.request().options.encode())
 }
 
@@ -51,7 +51,7 @@ func TestTripRequestOptions(t *testing.T) {
 	}
 	assert.Equal(
 		t,
-		"destination=last&geometries=polyline6&roundtrip=true",
+		"destination=last&geometries=polyline6&roundtrip=true&source=any",
 		req.request().options.encode())
 }
 
