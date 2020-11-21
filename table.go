@@ -5,12 +5,20 @@ type TableRequest struct {
 	Profile               string
 	Coordinates           Geometry
 	Sources, Destinations []int
+	Annotations           Annotations
+	FallbackSpeed         float64
+	FallbackCoordinate    FallbackCoordinate
+	ScaleFactor           float64
 }
 
 // TableResponse resresents a response from the table method
 type TableResponse struct {
 	ResponseStatus
-	Durations [][]float32 `json:"durations"`
+	Durations          [][]float32 `json:"durations"`
+	Distances          [][]float32 `json:"distances"`
+	Sources            []Waypoint  `json:"sources"`
+	Destinations       []Waypoint  `json:"destinations"`
+	FallbackSpeedCells [][]bool    `json:"fallback_speed_cells"`
 }
 
 func (r TableRequest) request() *request {
@@ -21,7 +29,18 @@ func (r TableRequest) request() *request {
 	if len(r.Destinations) > 0 {
 		opts.addInt("destinations", r.Destinations...)
 	}
-
+	if len(r.Annotations) > 0 {
+		opts.setStringer("annotations", r.Annotations)
+	}
+	if r.FallbackSpeed > 0 {
+		opts.addFloat("fallback_speed", r.FallbackSpeed)
+	}
+	if len(r.FallbackCoordinate) > 0 {
+		opts.setStringer("fallback_coordinate", r.FallbackCoordinate)
+	}
+	if r.ScaleFactor > 0 {
+		opts.addFloat("scale_factor", r.ScaleFactor)
+	}
 	return &request{
 		profile: r.Profile,
 		coords:  r.Coordinates,
