@@ -159,6 +159,18 @@ func (o Overview) String() string {
 	return string(o)
 }
 
+type FallbackCoordinate string
+
+const (
+	FallbackCoordinateDefault FallbackCoordinate = "input"
+	FallbackCoordinateInput   FallbackCoordinate = "input"
+	FallbackCoordinateSnapped FallbackCoordinate = "snapped"
+)
+
+func (f FallbackCoordinate) String() string {
+	return string(f)
+}
+
 // ContinueStraight represents continue_straight OSRM routing parameter
 type ContinueStraight string
 
