@@ -159,6 +159,18 @@ func (o Overview) String() string {
 	return string(o)
 }
 
+type FallbackCoordinate string
+
+const (
+	FallbackCoordinateDefault FallbackCoordinate = "input"
+	FallbackCoordinateInput   FallbackCoordinate = "input"
+	FallbackCoordinateSnapped FallbackCoordinate = "snapped"
+)
+
+func (f FallbackCoordinate) String() string {
+	return string(f)
+}
+
 // ContinueStraight represents continue_straight OSRM routing parameter
 type ContinueStraight string
 
@@ -172,6 +184,42 @@ const (
 // String returns ContinueStraight as string
 func (c ContinueStraight) String() string {
 	return string(c)
+}
+
+type Roundtrip string
+
+const (
+	RoundtripDefault Roundtrip = "true"
+	RoundtripTrue    Roundtrip = "true"
+	RoundtripFalse   Roundtrip = "false"
+)
+
+func (r Roundtrip) String() string {
+	return string(r)
+}
+
+type Source string
+
+const (
+	SourceDefault Source = "any"
+	SourceAny     Source = "any"
+	SourceFirst   Source = "first"
+)
+
+func (s Source) String() string {
+	return string(s)
+}
+
+type Destination string
+
+const (
+	DestinationDefault Destination = "any"
+	DestinationAny     Destination = "any"
+	DestinationLast    Destination = "last"
+)
+
+func (d Destination) String() string {
+	return string(d)
 }
 
 // request contains parameters for OSRM query
