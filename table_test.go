@@ -15,6 +15,7 @@ func TestNotEmptyTableRequestOptions(t *testing.T) {
 	req := TableRequest{
 		Sources:      []int{0, 1, 2},
 		Destinations: []int{1, 3},
+		Annotations:  []string{AnnotationsDuration.String(), AnnotationsDistance.String()},
 	}
-	assert.Equal(t, "destinations=1;3&sources=0;1;2", req.request().options.encode())
+	assert.Equal(t, "annotations=duration;distance&destinations=1;3&sources=0;1;2", req.request().options.encode())
 }
