@@ -133,3 +133,13 @@ func (o OSRM) Nearest(ctx context.Context, r NearestRequest) (*NearestResponse, 
 	}
 	return &resp, nil
 }
+
+// Trip solves the Traveling Salesman Problem using a greedy heuristic.
+// See https://github.com/Project-OSRM/osrm-backend/blob/master/docs/http.md#trip-service for details.
+func (o OSRM) Trip(ctx context.Context, r TripRequest) (*TripResponse, error) {
+	var resp TripResponse
+	if err := o.query(ctx, r.request(), &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}

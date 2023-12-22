@@ -174,6 +174,48 @@ func (c ContinueStraight) String() string {
 	return string(c)
 }
 
+// Roundtrip represents whether the route is a roundtrip (returns to first location)
+type Roundtrip string
+
+// Available roundtrip values
+const (
+	RoundtripTrue  Roundtrip = "true"
+	RoundtripFalse Roundtrip = "false"
+)
+
+// String returns Roundtrip as a string
+func (o Roundtrip) String() string {
+	return string(o)
+}
+
+// Source represents source OSRM routing parameter
+type Source string
+
+// Source values
+const (
+	SourceAny    Source = "any"
+	SourceFirst  Source = "first"
+)
+
+// String returns Source as string
+func (c Source) String() string {
+	return string(c)
+}
+
+// Destination represents destination OSRM routing parameter
+type Destination string
+
+// Destination values
+const (
+	DestinationAny    Destination = "any"
+	DestinationLast   Destination = "last"
+)
+
+// String returns Destination as string
+func (c Destination) String() string {
+	return string(c)
+}
+
 // request contains parameters for OSRM query
 type request struct {
 	profile string
